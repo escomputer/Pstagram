@@ -57,5 +57,16 @@ public class FriendService {
 		friend.accept();
 		return new FriendResponseDto(friend.getStatus());
 	}
+
+	public FriendResponseDto rejectFriend(Long requesterId, Long currentUserId) {
+		User requester = getUser(requesterId);
+		User reciever = getUser(currentUserId);
+
+		Friend friend = friendRepository.findByRequesterAndReciever(requester, reciever)
+			.orElseThrow(() -> new IllegalArgumentException("요청이 존재하지 않습니다."));
+		friend.reject();
+		return new FriendResponseDto(friend.getStatus());
+
+	}
 }
 

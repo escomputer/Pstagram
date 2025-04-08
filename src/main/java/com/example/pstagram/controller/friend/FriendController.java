@@ -47,4 +47,12 @@ public class FriendController {
 		return ResponseEntity.ok(new ApiResponse<>(200, message, response));
 	}
 
+	@PostMapping("status/{requesterId}/reject")
+	public ResponseEntity<ApiResponse<FriendResponseDto>> rejectFriend(@PathVariable Long requesterId, Locale locale) {
+		FriendResponseDto response = friendService.rejectFriend(requesterId, getCurrentUserId());
+		String message = messageSource.getMessage("friend.reject.success", null, locale);
+		return ResponseEntity.ok(new ApiResponse<>(200, message, response));
+
+	}
+
 }
