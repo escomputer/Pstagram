@@ -41,7 +41,7 @@ public class FriendService {
 		User requester = getUser(requesterId);
 		User reciever = getUser(recieverId);
 
-		Friend friend = friendRepository.findByBoth(requester, reciever)
+		Friend friend = friendRepository.findByRequesterAndReciever(requester, reciever)
 			.orElseThrow(() -> new IllegalArgumentException("요청이 존재하지 않습니다."));
 
 		friendRepository.delete(friend);
@@ -52,7 +52,7 @@ public class FriendService {
 		User reciever = getUser(recieverId);
 		User requester = getUser(requesterId);
 
-		Friend friend = friendRepository.findByBoth(requester, reciever)
+		Friend friend = friendRepository.findByRequesterAndReciever(requester, reciever)
 			.orElseThrow(() -> new IllegalArgumentException("요청이 존재하지 않습니다."));
 		friend.accept();
 		return new FriendResponseDto(friend.getStatus());
