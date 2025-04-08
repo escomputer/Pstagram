@@ -1,7 +1,9 @@
 package com.example.pstagram.service.user;
 
+import com.example.pstagram.config.MessageUtil;
 import com.example.pstagram.config.PasswordEncoder;
 import com.example.pstagram.domain.user.User;
+import com.example.pstagram.dto.user.DeleteUserRequestDto;
 import com.example.pstagram.dto.user.LoginRequestDto;
 import com.example.pstagram.dto.user.SignUpRequestDto;
 import com.example.pstagram.dto.user.UserResponseDto;
@@ -9,6 +11,7 @@ import com.example.pstagram.exception.user.EmailNotFoundException;
 import com.example.pstagram.exception.user.InvalidPasswordException;
 import com.example.pstagram.repository.user.UserRepository;
 import com.example.pstagram.exception.user.EmailAlreadyExistsException;
+import com.example.pstagram.exception.user.AlreadyDeletedUserException;
 
 import lombok.RequiredArgsConstructor;
 
@@ -25,6 +28,7 @@ public class UserService {
 
 	private final UserRepository userRepository;
 	private final PasswordEncoder passwordEncoder;
+	private final MessageUtil messageUtil;
 
 	/**
 	 * 회원가입 로직을 처리
@@ -76,6 +80,28 @@ public class UserService {
 		}
 
 		return new UserResponseDto(user.getId(), user.getEmail(), user.getNickname());
+	}
+
+	/**
+	 * 회원탈퇴 처리
+	 *
+	 * @param requestDto 이메일, 비밀번호를 포함한 탈퇴 요청
+	 */
+	@Transactional
+	public void deleteUser(DeleteUserRequestDto requestDto) {
+		User user = userRepository.findByEmail(requestDto.getEmail())
+			.orElseThrow(() -> new EmailNotFoundException(messageUtil.getMessage("user.email.not-found")));
+
+		if (user.getDeletedAt() != null) {
+			throw new AlreadyDeletedUserException(messageUtil.getMessage("user.already-deleted"));
+		}
+
+		if (!passwordEncoder.matches(requestDto.getCurrentPassword(), user.getPassword())) {
+			throw new InvalidPasswordException(messageUtil.getMessage("user.password.invalid"));
+		}
+
+		// soft delete 처리
+		user.timeWhenDeleted();
 	}
 
 }
