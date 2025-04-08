@@ -1,12 +1,16 @@
 package com.example.pstagram.service.friend;
 
+import java.util.List;
+
 import jakarta.transaction.Transactional;
 
 import lombok.RequiredArgsConstructor;
 
 import org.springframework.stereotype.Service;
 import com.example.pstagram.domain.friend.Friend;
+import com.example.pstagram.domain.friend.FriendStatus;
 import com.example.pstagram.domain.user.User;
+import com.example.pstagram.dto.dto.friend.FriendListResponseDto;
 import com.example.pstagram.dto.dto.friend.FriendResponseDto;
 import com.example.pstagram.repository.friend.FriendRepository;
 import com.example.pstagram.repository.user.UserRepository;
@@ -58,6 +62,7 @@ public class FriendService {
 		return new FriendResponseDto(friend.getStatus());
 	}
 
+	@Transactional
 	public FriendResponseDto rejectFriend(Long requesterId, Long currentUserId) {
 		User requester = getUser(requesterId);
 		User reciever = getUser(currentUserId);
@@ -67,6 +72,15 @@ public class FriendService {
 		friend.reject();
 		return new FriendResponseDto(friend.getStatus());
 
+	}
+
+	@Transactional
+	public List<FriendListResponseDto> getFriendList(Long currentUserId, FriendStatus status) {
+		User currentUser = getUser(currentUserId);
+
+		List<FriendListResponseDto> friendList = friendRepository.findFriendList(currentUser.getId(), status);
+
+		return friendList;
 	}
 }
 

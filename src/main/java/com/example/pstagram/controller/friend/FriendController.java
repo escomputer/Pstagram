@@ -1,5 +1,6 @@
 package com.example.pstagram.controller.friend;
 
+import java.util.List;
 import java.util.Locale;
 
 import lombok.RequiredArgsConstructor;
@@ -7,11 +8,15 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.context.MessageSource;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import com.example.pstagram.domain.friend.FriendStatus;
 import com.example.pstagram.dto.dto.friend.ApiResponse;
+import com.example.pstagram.dto.dto.friend.FriendListResponseDto;
 import com.example.pstagram.dto.dto.friend.FriendResponseDto;
 import com.example.pstagram.service.friend.FriendService;
 
@@ -53,6 +58,14 @@ public class FriendController {
 		String message = messageSource.getMessage("friend.reject.success", null, locale);
 		return ResponseEntity.ok(new ApiResponse<>(200, message, response));
 
+	}
+
+	@GetMapping
+	public ResponseEntity<ApiResponse<List<FriendListResponseDto>>> getFriends(Locale locale,
+		@RequestParam FriendStatus status) {
+		List<FriendListResponseDto> friends = friendService.getFriendList(getCurrentUserId(), status);
+		String message = messageSource.getMessage("friend.list.success", null, locale);
+		return ResponseEntity.ok(new ApiResponse<>(200, message, friends));
 	}
 
 }
