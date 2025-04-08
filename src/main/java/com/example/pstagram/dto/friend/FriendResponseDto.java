@@ -1,4 +1,4 @@
-package com.example.pstagram.dto;
+package com.example.pstagram.dto.friend;
 
 // 요청 수락 , 요청 거절 에 대한 주석
 

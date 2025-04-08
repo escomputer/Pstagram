@@ -1,4 +1,4 @@
-package com.example.pstagram.dto;
+package com.example.pstagram.dto.friend;
 
 import java.time.LocalDateTime;
 
