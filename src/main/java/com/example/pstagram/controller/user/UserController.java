@@ -2,10 +2,12 @@ package com.example.pstagram.controller.user;
 
 import com.example.pstagram.config.MessageUtil;
 import com.example.pstagram.dto.common.ApiResponse;
+import com.example.pstagram.dto.user.DeleteUserRequestDto;
 import com.example.pstagram.dto.user.LoginRequestDto;
 import com.example.pstagram.dto.user.SignUpRequestDto;
 import com.example.pstagram.dto.user.UserResponseDto;
 import com.example.pstagram.service.user.UserService;
+import com.example.pstagram.exception.user.UnauthorizedException;
 
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
@@ -37,8 +39,7 @@ public class UserController {
 	public ResponseEntity<ApiResponse<UserResponseDto>> signup(@Valid @RequestBody SignUpRequestDto requestDto) {
 		UserResponseDto responseDto = userService.signup(requestDto);
 		String message = messageUtil.getMessage("user.signup.success");
-		return ResponseEntity.status(HttpStatus.CREATED)
-			.body(new ApiResponse<>(message, responseDto));
+		return ResponseEntity.status(HttpStatus.CREATED).body(new ApiResponse<>(message, responseDto));
 	}
 
 	/**
@@ -58,5 +59,33 @@ public class UserController {
 
 		String message = messageUtil.getMessage("user.login.success");
 		return ResponseEntity.ok(new ApiResponse<>(message, user));
+	}
+
+	/**
+	 * 회원 탈퇴 API (세션 인증 확인 포함)
+	 *
+	 * @param requestDto 이메일 + 현재 비밀번호
+	 * @param session    로그인 사용자 세션
+	 * @return 탈퇴 성공 메시지
+	 */
+	@DeleteMapping("/delete")
+	public ResponseEntity<ApiResponse<Void>> deleteUser(@Valid @RequestBody DeleteUserRequestDto requestDto,
+		HttpSession session) {
+
+		Long userId = (Long) session.getAttribute("userId");
+		if (userId == null) {
+			throw new UnauthorizedException(messageUtil.getMessage("user.unauthorized"));
+		}
+
+		// 세션이 없거나 userId가 없는 경우 → 로그인 안 된 상태
+		if (userId == null) {
+			throw new UnauthorizedException(messageUtil.getMessage("user.unauthorized"));
+		}
+
+		userService.deleteUser(requestDto);
+
+		// 탈퇴 완료 메시지 반환
+		String message = messageUtil.getMessage("user.delete.success");
+		return ResponseEntity.ok(new ApiResponse<>(message, null));
 	}
 }
