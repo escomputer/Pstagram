@@ -73,4 +73,11 @@ public class FriendController {
 
 	}
 
+	@DeleteMapping("/friend/{friendId}")
+	public ResponseEntity<ApiResponse<Void>> deleteFriend(@PathVariable Long friendId, Locale locale) {
+		friendService.deleteFriend(friendId);
+		String message = messageSource.getMessage("friend.delete.success", null, locale);
+		return ResponseEntity.ok(new ApiResponse<>(200, message, null));
+	}
+
 }

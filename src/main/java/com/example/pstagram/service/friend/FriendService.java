@@ -91,5 +91,10 @@ public class FriendService {
 			currentUser.getId());
 		return waitingResponseDtoList;
 	}
+
+	@Transactional
+	public void deleteFriend(Long friendId) {
+		friendRepository.deleteById(friendId);
+	}
 }
 
