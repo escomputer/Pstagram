@@ -45,4 +45,13 @@ public class GlobalExceptionHandler {
 		String message = messageUtil.getMessage("user.password.invalid");
 		return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new ApiResponse<>(message, null));
 	}
+
+	/**
+	 * 회원탈퇴 예외 처리
+	 */
+	@ExceptionHandler(AlreadyDeletedUserException.class)
+	public ResponseEntity<ApiResponse<Void>> handleAlreadyDeletedUserException(AlreadyDeletedUserException ex) {
+		return ResponseEntity.status(HttpStatus.CONFLICT)
+			.body(new ApiResponse<>(ex.getMessage(), null));
+	}
 }
