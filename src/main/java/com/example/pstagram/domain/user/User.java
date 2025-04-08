@@ -2,8 +2,8 @@ package com.example.pstagram.domain.user;
 
 import jakarta.persistence.*;
 import lombok.*;
-import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 /**
  * 사용자 정보를 저장하는 엔티티
@@ -18,38 +18,36 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 @EntityListeners(AuditingEntityListener.class)
 public class User {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Long id;
 
-    @Column(nullable = false, unique = true)
-    private String email;
+	@Column(nullable = false, unique = true)
+	private String email;
 
-    @Column(nullable = false)
-    private String password;
+	@Column(nullable = false)
+	private String password;
 
-    @Column(nullable = false)
-    private String nickname;
+	@Column(nullable = false)
+	private String nickname;
 
-    private String bio;
+	private String bio;
 
-    @Builder
-    public User(String email, String password, String nickname, String bio) {
-        this.email = email;
-        this.password = password;
-        this.nickname = nickname;
-        this.bio = bio;
-    }
+	@Builder
+	public User(String email, String password, String nickname, String bio) {
+		this.email = email;
+		this.password = password;
+		this.nickname = nickname;
+		this.bio = bio;
+	}
 
+	public void updateProfile(String nickname, String bio) {
+		this.nickname = nickname;
+		this.bio = bio;
+	}
 
-
-    public void updateProfile(String nickname, String bio) {
-        this.nickname = nickname;
-        this.bio = bio;
-    }
-
-    public void updatePassword(String newPassword) {
-        this.password = newPassword;
-    }
+	public void updatePassword(String newPassword) {
+		this.password = newPassword;
+	}
 
 }
