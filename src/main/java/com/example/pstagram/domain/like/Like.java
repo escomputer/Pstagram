@@ -17,7 +17,9 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+
 //Base를 받기 위해서 !! JPA Auditing
+
 @EntityListeners(AuditingEntityListener.class)
 public class Like {
 
