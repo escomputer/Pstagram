@@ -16,7 +16,6 @@ import lombok.Getter;
  */
 
 @Getter
-@AllArgsConstructor
 
 /**
  * @AllArgsConstructor
