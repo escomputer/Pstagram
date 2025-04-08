@@ -48,7 +48,7 @@ public class FriendService {
 	}
 
 	@Transactional
-	public FriendResponseDto acceptFriend(Long recieverId, Long requesterId) {
+	public FriendResponseDto acceptFriend(Long requesterId, Long recieverId) {
 		User reciever = getUser(recieverId);
 		User requester = getUser(requesterId);
 
