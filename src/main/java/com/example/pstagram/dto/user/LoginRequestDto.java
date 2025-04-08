@@ -19,12 +19,18 @@ public class LoginRequestDto {
 
 	@Email(message = "이메일 형식이 아닙니다.")
 	@NotBlank(message = "이메일은 필수입니다.")
-	private String email;
+	private final String email; // 불변객체
 
 	/**
 	 * 로그인할 사용자 비밀번호
 	 */
 
 	@NotBlank(message = "비밀번호는 필수입니다.")
-	private String password;
+	private final String password;
+
+	public LoginRequestDto(String email, String password) {
+		this.email = email;
+		this.password = password;
+	}
+
 }

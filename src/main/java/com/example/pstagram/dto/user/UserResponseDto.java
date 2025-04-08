@@ -32,17 +32,23 @@ public class UserResponseDto {
 	 * 사용자 고유 ID
 	 */
 
-	private Long id;
+	private final Long id;
 
 	/**
 	 * 사용자 이메일 주소
 	 */
 
-	private String email;
+	private final String email;
 
 	/**
 	 * 사용자 닉네임
 	 */
 
-	private String nickname;
+	private final String nickname;
+
+	public UserResponseDto(Long id, String email, String nickname) {
+		this.id = id;
+		this.email = email;
+		this.nickname = nickname;
+	}
 }

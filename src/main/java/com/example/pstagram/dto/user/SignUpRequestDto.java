@@ -24,7 +24,7 @@ public class SignUpRequestDto {
 
 	@Email(message = "이메일 형식이 아닙니다.")
 	@NotBlank(message = "이메일은 필수입니다.")
-	private String email;
+	private final String email;
 
 	/**
 	 * 사용자 비밀번호
@@ -40,7 +40,7 @@ public class SignUpRequestDto {
 	)
 	// 정규 표현식
 
-	private String password;
+	private final String password;
 
 	/**
 	 * 사용자 닉네임
@@ -48,5 +48,13 @@ public class SignUpRequestDto {
 	 */
 
 	@NotBlank(message = "닉네임은 필수입니다.")
-	private String nickname;
+	private final String nickname;
+
+
+	public SignUpRequestDto(String email, String password, String nickname) {
+		this.email = email;
+		this.password = password;
+		this.nickname = nickname;
+	}
+
 }
