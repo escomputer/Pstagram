@@ -3,8 +3,8 @@ package com.example.pstagram.domain.like;
 import com.example.pstagram.domain.user.User;
 import jakarta.persistence.*;
 import lombok.*;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
-import java.time.LocalDateTime;
 
 /**
  * 게시물 또는 댓글에 대한 좋아요를 저장하는 엔티티
@@ -17,8 +17,8 @@ import java.time.LocalDateTime;
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@AllArgsConstructor //
-@Builder
+//Base를 받기 위해서 !! JPA Auditing
+@EntityListeners(AuditingEntityListener.class)
 public class Like {
 
     @Id
@@ -35,10 +35,10 @@ public class Like {
     @Column(nullable = false)
     private Long targetId; // 게시물 ID 또는 댓글 ID
 
-    private LocalDateTime createdAt;
-
-    @PrePersist
-    public void onCreate() {
-        this.createdAt = LocalDateTime.now();
+    @Builder
+    public Like(User user, String targetType, Long targetId) {
+        this.user = user;
+        this.targetType = targetType;
+        this.targetId = targetId;
     }
 }

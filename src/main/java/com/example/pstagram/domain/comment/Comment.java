@@ -1,11 +1,13 @@
 package com.example.pstagram.domain.comment;
 
+import com.example.pstagram.domain.Base;
+
 import com.example.pstagram.domain.post.Post;
 import com.example.pstagram.domain.user.User;
 import jakarta.persistence.*;
 import lombok.*;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
-import java.time.LocalDateTime;
 
 /**
  * 게시물에 작성된 댓글을 저장하는 엔티티
@@ -18,9 +20,8 @@ import java.time.LocalDateTime;
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@AllArgsConstructor // 빼
-@Builder // ''
-public class Comment {
+@EntityListeners(AuditingEntityListener.class)
+public class Comment extends Base {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -37,18 +38,13 @@ public class Comment {
     @Column(nullable = false, columnDefinition = "TEXT")
     private String content;
 
-    private LocalDateTime createdAt;
-    private LocalDateTime updatedAt;
+    @Builder
+    public Comment(User user, Post post, String content) {
+        this.user = user;
+        this.post = post;
+        this.content = content;
+    } // AllArgsConstructor 대신 ! (id를 제외하기 위해서)
 
-    @PrePersist
-    public void onCreate() {
-        this.createdAt = LocalDateTime.now();
-    }
-
-    @PreUpdate
-    public void onUpdate() {
-        this.updatedAt = LocalDateTime.now();
-    }
 
     public void updateContent(String content) {
         this.content = content;

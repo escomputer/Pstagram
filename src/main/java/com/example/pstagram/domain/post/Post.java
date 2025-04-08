@@ -3,8 +3,8 @@ package com.example.pstagram.domain.post;
 import com.example.pstagram.domain.user.User;
 import jakarta.persistence.*;
 import lombok.*;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
-import java.time.LocalDateTime;
 
 /**
  * 사용자가 작성한 게시물을 저장하는 엔티티
@@ -17,8 +17,7 @@ import java.time.LocalDateTime;
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@AllArgsConstructor
-@Builder
+@EntityListeners(AuditingEntityListener.class)
 public class Post {
 
     @Id
@@ -32,19 +31,11 @@ public class Post {
     @Column(columnDefinition = "TEXT")
     private String content;
 
-    private LocalDateTime createdAt;
-    private LocalDateTime updatedAt;
-
-    @PrePersist
-    public void onCreate() {
-        this.createdAt = LocalDateTime.now();
+    @Builder
+    public Post(User user, String content) {
+        this.user = user;
+        this.content = content;
     }
-
-    @PreUpdate
-    public void onUpdate() {
-        this.updatedAt = LocalDateTime.now();
-    }
-
     public void updateContent(String content) {
         this.content = content;
     }
