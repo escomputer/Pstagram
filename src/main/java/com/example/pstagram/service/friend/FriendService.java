@@ -27,7 +27,7 @@ public class FriendService {
 		User requester = getUser(requesterId);
 		User reciever = getUser(recieverId);
 
-		if (friendRepository.findByBoth(requester, reciever).isPresent()) {
+		if (friendRepository.findByRequesterAndReciever(requester, reciever).isPresent()) {
 			throw new IllegalArgumentException("이미 보낸 요청입니다.");
 		}// 중복 방지
 
