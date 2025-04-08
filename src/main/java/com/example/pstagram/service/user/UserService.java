@@ -1,10 +1,10 @@
-package com.example.pstagram.service;
+package com.example.pstagram.service.user;
 
 import com.example.pstagram.config.PasswordEncoder;
 import com.example.pstagram.domain.user.User;
 import com.example.pstagram.dto.user.SignUpRequestDto;
 import com.example.pstagram.dto.user.UserResponseDto;
-import com.example.pstagram.repository.UserRepository;
+import com.example.pstagram.repository.user.UserRepository;
 import com.example.pstagram.exception.user.EmailAlreadyExistsException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

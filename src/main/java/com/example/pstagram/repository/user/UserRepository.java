@@ -1,4 +1,4 @@
-package com.example.pstagram.repository;
+package com.example.pstagram.repository.user;
 
 import com.example.pstagram.domain.user.User;
 import org.springframework.data.jpa.repository.JpaRepository;
