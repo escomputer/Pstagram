@@ -62,6 +62,19 @@ public class UserController {
 	}
 
 	/**
+	 * 로그아웃 API
+	 *
+	 * @param session 현재 사용자 세션
+	 * @return 로그아웃 완료 메시지
+	 */
+	@PostMapping("/logout")
+	public ResponseEntity<ApiResponse<Void>> logout(HttpSession session) {
+		session.invalidate(); // 세션 무효화
+		String message = messageUtil.getMessage("user.logout.success");
+		return ResponseEntity.ok(new ApiResponse<>(message, null));
+	}
+
+	/**
 	 * 회원 탈퇴 API (세션 인증 확인 포함)
 	 *
 	 * @param requestDto 이메일 + 현재 비밀번호
@@ -72,7 +85,7 @@ public class UserController {
 	public ResponseEntity<ApiResponse<Void>> deleteUser(@Valid @RequestBody DeleteUserRequestDto requestDto,
 		HttpSession session) {
 
-		Long userId = (Long) session.getAttribute("userId");
+		Long userId = (Long)session.getAttribute("userId");
 		if (userId == null) {
 			throw new UnauthorizedException(messageUtil.getMessage("user.unauthorized"));
 		}
