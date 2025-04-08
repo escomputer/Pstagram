@@ -34,5 +34,16 @@ public class FriendService {
 
 		friendRepository.save(friend);
 	}
+
+	@Transactional
+	public void cancelRequest(Long requesterId, Long recieverId) {
+		User requester = getUser(requesterId);
+		User reciever = getUser(recieverId);
+
+		Friend friend = friendRepository.findByBoth(requester, reciever)
+			.orElseThrow(() -> new IllegalArgumentException("요청이 존재하지 않습니다."));
+
+		friendRepository.delete(friend);
+	}
 }
 

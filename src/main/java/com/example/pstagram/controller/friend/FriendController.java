@@ -6,6 +6,7 @@ import lombok.RequiredArgsConstructor;
 
 import org.springframework.context.MessageSource;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -28,6 +29,13 @@ public class FriendController {
 	public ResponseEntity<ApiResponse<Void>> requestFriend(@PathVariable Long userId, Locale locale) {
 		friendService.requestFriend(getCurrentUserId(), userId);
 		String message = messageSource.getMessage("friend.request.success", null, locale);
+		return ResponseEntity.ok(new ApiResponse<>(200, message, null));
+	}
+
+	@DeleteMapping("/request/{userId}")
+	public ResponseEntity<ApiResponse<Void>> cancelRequest(@PathVariable Long userId, Locale locale) {
+		friendService.cancelRequest(getCurrentUserId(), userId);
+		String message = messageSource.getMessage("friend.cancel.success", null, locale);
 		return ResponseEntity.ok(new ApiResponse<>(200, message, null));
 	}
 
