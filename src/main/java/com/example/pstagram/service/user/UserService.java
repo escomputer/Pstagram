@@ -2,11 +2,16 @@ package com.example.pstagram.service.user;
 
 import com.example.pstagram.config.PasswordEncoder;
 import com.example.pstagram.domain.user.User;
+import com.example.pstagram.dto.user.LoginRequestDto;
 import com.example.pstagram.dto.user.SignUpRequestDto;
 import com.example.pstagram.dto.user.UserResponseDto;
+import com.example.pstagram.exception.user.EmailNotFoundException;
+import com.example.pstagram.exception.user.InvalidPasswordException;
 import com.example.pstagram.repository.user.UserRepository;
 import com.example.pstagram.exception.user.EmailAlreadyExistsException;
+
 import lombok.RequiredArgsConstructor;
+
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -53,4 +58,24 @@ public class UserService {
 		// 응답 DTO 반환
 		return new UserResponseDto(user.getId(), user.getEmail(), user.getNickname());
 	}
+
+	/**
+	 * 로그인 로직을 처리
+	 *
+	 * @param requestDto 로그인 요청 정보
+	 * @return 로그인 성공 시 사용자 정보 응답 DTO
+	 */
+
+	@Transactional(readOnly = true)
+	public UserResponseDto login(LoginRequestDto requestDto) {
+		User user = userRepository.findByEmail(requestDto.getEmail())
+			.orElseThrow(() -> new EmailNotFoundException("존재하지 않는 이메일입니다."));
+
+		if (!passwordEncoder.matches(requestDto.getPassword(), user.getPassword())) {
+			throw new InvalidPasswordException("비밀번호가 일치하지 않습니다.");
+		}
+
+		return new UserResponseDto(user.getId(), user.getEmail(), user.getNickname());
+	}
+
 }
