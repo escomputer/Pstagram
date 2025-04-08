@@ -18,6 +18,7 @@ import com.example.pstagram.domain.friend.FriendStatus;
 import com.example.pstagram.dto.dto.friend.ApiResponse;
 import com.example.pstagram.dto.dto.friend.FriendListResponseDto;
 import com.example.pstagram.dto.dto.friend.FriendResponseDto;
+import com.example.pstagram.dto.dto.friend.FriendWaitingResponseDto;
 import com.example.pstagram.service.friend.FriendService;
 
 @RestController
@@ -60,12 +61,19 @@ public class FriendController {
 
 	}
 
-	@GetMapping
+	@GetMapping("/friend/accept")
 	public ResponseEntity<ApiResponse<List<FriendListResponseDto>>> getFriends(Locale locale,
 		@RequestParam FriendStatus status) {
 		List<FriendListResponseDto> friends = friendService.getFriendList(getCurrentUserId(), status);
-		String message = messageSource.getMessage("friend.list.success", null, locale);
-		return ResponseEntity.ok(new ApiResponse<>(200, message, friends));
+		return ResponseEntity.ok(new ApiResponse<>(200, null, friends));
+	}
+
+	@GetMapping("/friend/waiting")
+	public ResponseEntity<ApiResponse<List<FriendWaitingResponseDto>>> getWaitingList() {
+		Long currentUserId = getCurrentUserId();
+		List<FriendWaitingResponseDto> friends = friendService.getWaitingList(currentUserId);
+		return ResponseEntity.ok(new ApiResponse<>(200, null, friends));
+
 	}
 
 }

@@ -10,6 +10,7 @@ import com.example.pstagram.domain.friend.Friend;
 import com.example.pstagram.domain.friend.FriendStatus;
 import com.example.pstagram.domain.user.User;
 import com.example.pstagram.dto.dto.friend.FriendListResponseDto;
+import com.example.pstagram.dto.dto.friend.FriendWaitingResponseDto;
 
 public interface FriendRepository extends JpaRepository {
 	Optional<Friend> findByRequesterAndReciever(User requester, User reciever);
@@ -32,4 +33,17 @@ public interface FriendRepository extends JpaRepository {
 		""")
 	List<FriendListResponseDto> findFriendList(@Param("userId") Long userId,
 		@Param("status") FriendStatus status);
+
+	@Query("""
+			SELECT new com.example.pstagram.dto.dto.friend.FriendWaitingResponseDto(
+				f.id,
+				f.requester.id,
+				f.requester.nickname,
+				f.requestedAt
+			)
+			FROM Friend f
+			WHERE f.receiver.id = :userId
+			AND f.status = com.example.pstagram.domain.friend.FriendStatus.WAITING
+		""")
+	List<FriendWaitingResponseDto> findWaitingRequests(@Param("userId") Long userId);
 }

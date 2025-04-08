@@ -12,6 +12,7 @@ import com.example.pstagram.domain.friend.FriendStatus;
 import com.example.pstagram.domain.user.User;
 import com.example.pstagram.dto.dto.friend.FriendListResponseDto;
 import com.example.pstagram.dto.dto.friend.FriendResponseDto;
+import com.example.pstagram.dto.dto.friend.FriendWaitingResponseDto;
 import com.example.pstagram.repository.friend.FriendRepository;
 import com.example.pstagram.repository.user.UserRepository;
 
@@ -81,6 +82,15 @@ public class FriendService {
 		List<FriendListResponseDto> friendList = friendRepository.findFriendList(currentUser.getId(), status);
 
 		return friendList;
+	}
+
+	@Transactional
+	public List<FriendWaitingResponseDto> getWaitingList(Long currentUserId) {
+		User currentUser = getUser(currentUserId);
+
+		List<FriendWaitingResponseDto> waitingResponseDtoList = friendRepository.findWaitingRequests(
+			currentUser.getId());
+		return waitingResponseDtoList;
 	}
 }
 
