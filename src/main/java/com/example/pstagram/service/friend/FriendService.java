@@ -8,7 +8,6 @@ import lombok.RequiredArgsConstructor;
 
 import org.springframework.stereotype.Service;
 import com.example.pstagram.domain.friend.Friend;
-import com.example.pstagram.domain.friend.FriendStatus;
 import com.example.pstagram.domain.user.User;
 import com.example.pstagram.dto.dto.friend.FriendListResponseDto;
 import com.example.pstagram.dto.dto.friend.FriendResponseDto;
@@ -76,10 +75,10 @@ public class FriendService {
 	}
 
 	@Transactional
-	public List<FriendListResponseDto> getFriendList(Long currentUserId, FriendStatus status) {
+	public List<FriendListResponseDto> getFriendList(Long currentUserId) {
 		User currentUser = getUser(currentUserId);
 
-		List<FriendListResponseDto> friendList = friendRepository.findFriendList(currentUser.getId(), status);
+		List<FriendListResponseDto> friendList = friendRepository.findFriendList(currentUser.getId());
 
 		return friendList;
 	}

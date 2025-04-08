@@ -12,9 +12,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import com.example.pstagram.domain.friend.FriendStatus;
 import com.example.pstagram.dto.dto.friend.ApiResponse;
 import com.example.pstagram.dto.dto.friend.FriendListResponseDto;
 import com.example.pstagram.dto.dto.friend.FriendResponseDto;
@@ -62,9 +60,8 @@ public class FriendController {
 	}
 
 	@GetMapping("/friend/accept")
-	public ResponseEntity<ApiResponse<List<FriendListResponseDto>>> getFriends(Locale locale,
-		@RequestParam FriendStatus status) {
-		List<FriendListResponseDto> friends = friendService.getFriendList(getCurrentUserId(), status);
+	public ResponseEntity<ApiResponse<List<FriendListResponseDto>>> getFriends(Locale locale) {
+		List<FriendListResponseDto> friends = friendService.getFriendList(getCurrentUserId());
 		return ResponseEntity.ok(new ApiResponse<>(200, null, friends));
 	}
 

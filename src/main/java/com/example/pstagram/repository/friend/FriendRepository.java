@@ -7,7 +7,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import com.example.pstagram.domain.friend.Friend;
-import com.example.pstagram.domain.friend.FriendStatus;
 import com.example.pstagram.domain.user.User;
 import com.example.pstagram.dto.dto.friend.FriendListResponseDto;
 import com.example.pstagram.dto.dto.friend.FriendWaitingResponseDto;
@@ -29,10 +28,9 @@ public interface FriendRepository extends JpaRepository {
 			FROM Friend f
 			WHERE 
 				(f.requester.id = :userId OR f.receiver.id = :userId)
-			AND f.status = :status
+			AND f.status = com.example.pstagram.domain.friend.FriendStatus.ACCEPTED
 		""")
-	List<FriendListResponseDto> findFriendList(@Param("userId") Long userId,
-		@Param("status") FriendStatus status);
+	List<FriendListResponseDto> findFriendList(@Param("userId") Long userId);
 
 	@Query("""
 			SELECT new com.example.pstagram.dto.dto.friend.FriendWaitingResponseDto(
