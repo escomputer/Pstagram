@@ -7,6 +7,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import com.example.pstagram.domain.friend.Friend;
 import com.example.pstagram.domain.user.User;
+import com.example.pstagram.dto.dto.friend.FriendResponseDto;
 import com.example.pstagram.repository.friend.FriendRepository;
 import com.example.pstagram.repository.user.UserRepository;
 
@@ -44,6 +45,17 @@ public class FriendService {
 			.orElseThrow(() -> new IllegalArgumentException("요청이 존재하지 않습니다."));
 
 		friendRepository.delete(friend);
+	}
+
+	@Transactional
+	public FriendResponseDto acceptFriend(Long recieverId, Long requesterId) {
+		User reciever = getUser(recieverId);
+		User requester = getUser(requesterId);
+
+		Friend friend = friendRepository.findByBoth(requester, reciever)
+			.orElseThrow(() -> new IllegalArgumentException("요청이 존재하지 않습니다."));
+		friend.accept();
+		return new FriendResponseDto(friend.getStatus());
 	}
 }
 

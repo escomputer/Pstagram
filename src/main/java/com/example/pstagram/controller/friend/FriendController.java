@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import com.example.pstagram.dto.dto.friend.ApiResponse;
+import com.example.pstagram.dto.dto.friend.FriendResponseDto;
 import com.example.pstagram.service.friend.FriendService;
 
 @RestController
@@ -37,6 +38,13 @@ public class FriendController {
 		friendService.cancelRequest(getCurrentUserId(), userId);
 		String message = messageSource.getMessage("friend.cancel.success", null, locale);
 		return ResponseEntity.ok(new ApiResponse<>(200, message, null));
+	}
+
+	@PostMapping("/status/{requesterId}")
+	public ResponseEntity<ApiResponse<FriendResponseDto>> acceptFriend(@PathVariable Long requesterId, Locale locale) {
+		FriendResponseDto response = friendService.acceptFriend(getCurrentUserId(), requesterId);
+		String message = messageSource.getMessage("friend.accept.success", null, locale);
+		return ResponseEntity.ok(new ApiResponse<>(200, message, response));
 	}
 
 }
