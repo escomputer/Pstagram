@@ -1,4 +1,4 @@
-package com.example.pstagram.dto;
+package com.example.pstagram.dto.profile;
 
 import lombok.Getter;
 
