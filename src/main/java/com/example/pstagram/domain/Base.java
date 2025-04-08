@@ -24,7 +24,9 @@ public abstract class Base {
 	@LastModifiedDate
 	private LocalDateTime updatedAt = LocalDateTime.now();
 
-	private LocalDateTime deletedAt = LocalDateTime.now();
+
+	//timeWhenDeleted() 메서드에서만 deletedAt = LocalDateTime.now() 실행되도록 해야함
+	private LocalDateTime deletedAt; // 기본값 없이 null 상태 유지!
 
 	public void timeWhenDeleted() {
 		this.deletedAt = LocalDateTime.now();
