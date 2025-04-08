@@ -1,4 +1,4 @@
-package com.example.pstagram.exception;
+package com.example.pstagram.exception.user;
 
 /**
  * 이미 사용 중인 이메일로 회원가입을 시도할 경우 발생하는 예외
