@@ -17,6 +17,7 @@ public class PasswordEncoder {
 	 * @param rawPassword 사용자가 입력한 원문 비밀번호
 	 * @return 암호화된 비밀번호 문자열
 	 */
+
 	public String encode(String rawPassword) {
 		return BCrypt.withDefaults()
 			.hashToString(BCrypt.MIN_COST, rawPassword.toCharArray());
