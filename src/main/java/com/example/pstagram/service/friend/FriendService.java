@@ -10,9 +10,8 @@ import com.example.pstagram.domain.friend.Friend;
 import com.example.pstagram.domain.user.User;
 import com.example.pstagram.dto.dto.friend.FriendListResponseDto;
 import com.example.pstagram.dto.dto.friend.FriendResponseDto;
-import com.example.pstagram.dto.dto.friend.FriendWaitingResponseDto;
 import com.example.pstagram.repository.friend.FriendRepository;
-import com.example.pstagram.repository.user.UserRepository;
+import com.example.pstagram.service.user.UserService;
 
 //전체적으로 로그인한 상태가 아닐때? 예외가 추가되어야할것같다.
 @Service
@@ -20,16 +19,12 @@ import com.example.pstagram.repository.user.UserRepository;
 public class FriendService {
 
 	private final FriendRepository friendRepository;
-	private final UserRepository userRepository;
-
-	private User getUser(Long userId) {
-		return userRepository.findById(userId).orElseThrow(() -> new IllegalArgumentException("해당하는 유저가 없습니다."));
-	}
+	private final UserService userService;
 
 	@Transactional
 	public void requestFriend(Long requesterId, Long recieverId) {
-		User requester = getUser(requesterId);
-		User reciever = getUser(recieverId);
+		User requester = userService.getUser(requesterId);
+		User reciever = userService.getUser(recieverId);
 
 		if (friendRepository.findByRequesterAndReciever(requester, reciever).isPresent()) {
 			throw new IllegalArgumentException("이미 보낸 요청입니다.");
@@ -42,8 +37,8 @@ public class FriendService {
 
 	@Transactional
 	public void cancelRequest(Long requesterId, Long recieverId) {
-		User requester = getUser(requesterId);
-		User reciever = getUser(recieverId);
+		User requester = userService.getUser(requesterId);
+		User reciever = userService.getUser(recieverId);
 
 		Friend friend = friendRepository.findByRequesterAndReciever(requester, reciever)
 			.orElseThrow(() -> new IllegalArgumentException("요청이 존재하지 않습니다."));
@@ -53,8 +48,8 @@ public class FriendService {
 
 	@Transactional
 	public FriendResponseDto acceptFriend(Long requesterId, Long recieverId) {
-		User reciever = getUser(recieverId);
-		User requester = getUser(requesterId);
+		User reciever = userService.getUser(recieverId);
+		User requester = userService.getUser(requesterId);
 
 		Friend friend = friendRepository.findByRequesterAndReciever(requester, reciever)
 			.orElseThrow(() -> new IllegalArgumentException("요청이 존재하지 않습니다."));
@@ -64,8 +59,8 @@ public class FriendService {
 
 	@Transactional
 	public FriendResponseDto rejectFriend(Long requesterId, Long currentUserId) {
-		User requester = getUser(requesterId);
-		User reciever = getUser(currentUserId);
+		User requester = userService.getUser(requesterId);
+		User reciever = userService.getUser(currentUserId);
 
 		Friend friend = friendRepository.findByRequesterAndReciever(requester, reciever)
 			.orElseThrow(() -> new IllegalArgumentException("요청이 존재하지 않습니다."));
@@ -76,7 +71,7 @@ public class FriendService {
 
 	@Transactional(readOnly = true)
 	public List<FriendListResponseDto> getFriendList(Long currentUserId) {
-		User currentUser = getUser(currentUserId);
+		User currentUser = userService.getUser(currentUserId);
 
 		List<FriendListResponseDto> friendList = friendRepository.findFriendList(currentUser.getId());
 		//친구가 한명도 없을때 ! , 로그인한 사용자가 아닐때
@@ -84,18 +79,18 @@ public class FriendService {
 	}
 
 	@Transactional(readOnly = true)
-	public List<FriendWaitingResponseDto> getWaitingList(Long currentUserId) {
-		User currentUser = getUser(currentUserId);
+	public List<Friend> getWaitingList(Long currentUserId) {
+		User currentUser = userService.getUser(currentUserId);
 
-		List<FriendWaitingResponseDto> waitingResponseDtoList = friendRepository.findWaitingRequests(
-			currentUser.getId());
+		List<Friend> waitingResponseDtoList = friendRepository.findAllByReceiverAndStatus_Waiting(
+			currentUser);
 
 		//로그인한 사용자가 아닐때, 친구요청이 1명도 없을때
 		return waitingResponseDtoList;
 	}
 
 	@Transactional
-	public void deleteFriend(Long friendId) {
+	public void deleteFriend(Long friendId, Long currentUserId) {
 		friendRepository.deleteById(friendId);
 
 		//로그인한 사용자가 아닐떄
