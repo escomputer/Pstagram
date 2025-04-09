@@ -1,5 +1,7 @@
 package com.example.pstagram.repository.profile;
 
+import java.util.Optional;
+
 import org.springframework.context.annotation.Profile;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.http.HttpStatus;
@@ -11,4 +13,5 @@ public interface ProfileRepository extends JpaRepository<User, Long> {
 	default User findByOrIdElseTrow(Long id){
 		return findById(id).orElseThrow(()-> new ResponseStatusException(HttpStatus.NOT_FOUND, "Does not exist id = " + id));
 	}
+	Optional<User> findByEmail(String email);
 }
