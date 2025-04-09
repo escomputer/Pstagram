@@ -134,7 +134,7 @@ public class UserService {
 		foundUser.updatePassword(encodedNewPassword);
 	}
 
-	private User getUser(Long userId) {
+	public User getUser(Long userId) {
 		return userRepository.findById(userId).orElseThrow(() -> new IllegalArgumentException("해당하는 유저가 없습니다."));
 	}
 
