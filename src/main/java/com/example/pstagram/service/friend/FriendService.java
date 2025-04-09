@@ -14,6 +14,7 @@ import com.example.pstagram.dto.dto.friend.FriendWaitingResponseDto;
 import com.example.pstagram.repository.friend.FriendRepository;
 import com.example.pstagram.repository.user.UserRepository;
 
+//전체적으로 로그인한 상태가 아닐때? 예외가 추가되어야할것같다.
 @Service
 @RequiredArgsConstructor
 public class FriendService {
@@ -78,7 +79,7 @@ public class FriendService {
 		User currentUser = getUser(currentUserId);
 
 		List<FriendListResponseDto> friendList = friendRepository.findFriendList(currentUser.getId());
-
+		//친구가 한명도 없을때 ! , 로그인한 사용자가 아닐때
 		return friendList;
 	}
 
@@ -88,12 +89,16 @@ public class FriendService {
 
 		List<FriendWaitingResponseDto> waitingResponseDtoList = friendRepository.findWaitingRequests(
 			currentUser.getId());
+
+		//로그인한 사용자가 아닐때, 친구요청이 1명도 없을때
 		return waitingResponseDtoList;
 	}
 
 	@Transactional
 	public void deleteFriend(Long friendId) {
 		friendRepository.deleteById(friendId);
+
+		//로그인한 사용자가 아닐떄
 	}
 }
 
