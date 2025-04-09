@@ -82,4 +82,9 @@ public class CommentService {
 			comment.getDeletedAt()
 		);
 	}
+
+	public void deleteComment(Long commentId) {
+		Comment comment = commentRepository.findById(commentId).get();
+		commentRepository.delete(comment);
+	}
 }

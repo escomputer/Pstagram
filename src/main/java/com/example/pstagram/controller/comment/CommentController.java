@@ -6,6 +6,7 @@ import lombok.RequiredArgsConstructor;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -45,6 +46,12 @@ public class CommentController {
 
 		CommentResponseDto updateComment = commentService.updateComment(commentId, commentRequestDto);
 		return new ResponseEntity<>(updateComment, HttpStatus.OK);
+	}
+
+	@DeleteMapping("/api/posts/{postId}/comments/{commentId}")
+	public ResponseEntity<Void> deleteComment(@PathVariable Long commentId) {
+		commentService.deleteComment(commentId);
+		return new ResponseEntity<>(HttpStatus.OK);
 	}
 
 }
