@@ -1,7 +1,4 @@
 spring:
-  messages:
-    basename: messages
-    encoding: UTF-8
   datasource:
     url: jdbc:h2:mem:testdb
     driver-class-name: org.h2.Driver
@@ -23,5 +20,6 @@ logging:
   level:
     org.hibernate.SQL: debug
 
-
-
+messages:
+  basename: messages
+  encoding: UTF-8
