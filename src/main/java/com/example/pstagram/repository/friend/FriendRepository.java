@@ -11,7 +11,7 @@ import com.example.pstagram.domain.user.User;
 import com.example.pstagram.dto.dto.friend.FriendListResponseDto;
 import com.example.pstagram.dto.dto.friend.FriendWaitingResponseDto;
 
-public interface FriendRepository extends JpaRepository {
+public interface FriendRepository extends JpaRepository<Friend, Long> {
 	Optional<Friend> findByRequesterAndReciever(User requester, User reciever);
 
 	@Query("""
