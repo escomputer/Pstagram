@@ -14,6 +14,7 @@ import com.example.pstagram.dto.user.LoginRequestDto;
 import com.example.pstagram.dto.user.SignUpRequestDto;
 import com.example.pstagram.dto.user.UpdatePasswordRequestDto;
 import com.example.pstagram.dto.user.UserResponseDto;
+import com.example.pstagram.exception.friend.UserNotFoundException;
 import com.example.pstagram.exception.user.AlreadyDeletedUserException;
 import com.example.pstagram.exception.user.EmailAlreadyExistsException;
 import com.example.pstagram.exception.user.EmailNotFoundException;
@@ -135,7 +136,7 @@ public class UserService {
 	}
 
 	public User getUser(Long userId) {
-		return userRepository.findById(userId).orElseThrow(() -> new IllegalArgumentException("해당하는 유저가 없습니다."));
+		return userRepository.findById(userId).orElseThrow(() -> new UserNotFoundException("해당하는 유저가 없습니다."));
 	}
 
 }

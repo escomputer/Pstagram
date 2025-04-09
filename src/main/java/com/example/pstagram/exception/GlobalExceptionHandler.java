@@ -1,10 +1,16 @@
-package com.example.pstagram.exception.friend;
+package com.example.pstagram.exception;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import com.example.pstagram.dto.dto.friend.ApiResponse;
+import com.example.pstagram.exception.friend.DuplicateFriendRequestException;
+import com.example.pstagram.exception.friend.FriendNotFoundException;
+import com.example.pstagram.exception.friend.FriendRequestNotFoundException;
+import com.example.pstagram.exception.friend.SelfRequestException;
+import com.example.pstagram.exception.friend.UnauthorizedException;
+import com.example.pstagram.exception.friend.UserNotFoundException;
 
 @RestControllerAdvice
 public class GlobalExceptionHandler {

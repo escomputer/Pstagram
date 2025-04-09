@@ -10,10 +10,13 @@ import com.example.pstagram.domain.friend.Friend;
 import com.example.pstagram.domain.user.User;
 import com.example.pstagram.dto.dto.friend.FriendListResponseDto;
 import com.example.pstagram.dto.dto.friend.FriendResponseDto;
+import com.example.pstagram.exception.friend.DuplicateFriendRequestException;
+import com.example.pstagram.exception.friend.FriendNotFoundException;
+import com.example.pstagram.exception.friend.FriendRequestNotFoundException;
+import com.example.pstagram.exception.friend.SelfRequestException;
 import com.example.pstagram.repository.friend.FriendRepository;
 import com.example.pstagram.service.user.UserService;
 
-//전체적으로 로그인한 상태가 아닐때? 예외가 추가되어야할것같다.
 @Service
 @RequiredArgsConstructor
 public class FriendService {
@@ -27,8 +30,12 @@ public class FriendService {
 		User reciever = userService.getUser(recieverId);
 
 		if (friendRepository.findByRequesterAndReciever(requester, reciever).isPresent()) {
-			throw new IllegalArgumentException("이미 보낸 요청입니다.");
+			throw new DuplicateFriendRequestException("이미 보낸 요청입니다.");
 		}// 중복 방지
+
+		if (requesterId.equals(recieverId)) {
+			throw new SelfRequestException("자기 자신에게 친구 요청을 보낼 수 없습니다.");
+		}
 
 		Friend friend = Friend.builder().requester(requester).receiver(reciever).build();
 
@@ -41,7 +48,7 @@ public class FriendService {
 		User reciever = userService.getUser(recieverId);
 
 		Friend friend = friendRepository.findByRequesterAndReciever(requester, reciever)
-			.orElseThrow(() -> new IllegalArgumentException("요청이 존재하지 않습니다."));
+			.orElseThrow(() -> new FriendRequestNotFoundException("요청이 존재하지 않습니다."));
 
 		friendRepository.delete(friend);
 	}
@@ -52,7 +59,7 @@ public class FriendService {
 		User requester = userService.getUser(requesterId);
 
 		Friend friend = friendRepository.findByRequesterAndReciever(requester, reciever)
-			.orElseThrow(() -> new IllegalArgumentException("요청이 존재하지 않습니다."));
+			.orElseThrow(() -> new FriendNotFoundException("요청이 존재하지 않습니다."));
 		friend.accept();
 		return new FriendResponseDto(friend.getStatus());
 	}
@@ -63,7 +70,7 @@ public class FriendService {
 		User reciever = userService.getUser(currentUserId);
 
 		Friend friend = friendRepository.findByRequesterAndReciever(requester, reciever)
-			.orElseThrow(() -> new IllegalArgumentException("요청이 존재하지 않습니다."));
+			.orElseThrow(() -> new FriendNotFoundException("요청이 존재하지 않습니다."));
 		friend.reject();
 		return new FriendResponseDto(friend.getStatus());
 
@@ -73,7 +80,7 @@ public class FriendService {
 	public List<FriendListResponseDto> getFriendList(Long currentUserId) {
 		User currentUser = userService.getUser(currentUserId);
 
-		List<FriendListResponseDto> friendList = friendRepository.findFriendList(currentUser.getId());
+		List<Friend> friendList = friendRepository.findFriendList(currentUser.getId());
 		//친구가 한명도 없을때 ! , 로그인한 사용자가 아닐때
 		return friendList;
 	}
@@ -82,8 +89,7 @@ public class FriendService {
 	public List<Friend> getWaitingList(Long currentUserId) {
 		User currentUser = userService.getUser(currentUserId);
 
-		List<Friend> waitingResponseDtoList = friendRepository.findAllByReceiverAndStatus_Waiting(
-			currentUser);
+		List<Friend> waitingResponseDtoList = friendRepository.findAllByReceiverAndStatus_Waiting(currentUser);
 
 		//로그인한 사용자가 아닐때, 친구요청이 1명도 없을때
 		return waitingResponseDtoList;
