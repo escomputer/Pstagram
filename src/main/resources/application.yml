@@ -19,3 +19,7 @@ spring:
 logging:
   level:
     org.hibernate.SQL: debug
+
+messages:
+  basename: messages
+  encoding: UTF-8

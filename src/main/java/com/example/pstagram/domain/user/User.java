@@ -1,5 +1,9 @@
 package com.example.pstagram.domain.user;
 
+import java.time.LocalDateTime;
+
+import org.hibernate.annotations.SQLDelete;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -40,6 +44,8 @@ public class User extends Base {
 	private String nickname;
 
 	private String bio;
+
+	private LocalDateTime deletedAt; // 기본값 없이 null로!
 
 	@Builder
 	public User(String email, String password, String nickname, String bio) {
