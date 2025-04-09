@@ -12,7 +12,7 @@ import org.springframework.security.access.AccessDeniedException;
 import jakarta.validation.ConstraintViolationException;
 
 @ControllerAdvice
-public class MyExeptionrHandler {
+public class GlobalExceptionHandler {
 	@ExceptionHandler(Exception.class)
 	public ResponseEntity<String> handleGeneralException(Exception ex) {
 		return new ResponseEntity<>("An error occurred: " + ex.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);

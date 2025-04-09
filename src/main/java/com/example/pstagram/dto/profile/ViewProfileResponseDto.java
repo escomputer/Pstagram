@@ -4,7 +4,7 @@ import lombok.Getter;
 
 @Getter
 public class ViewProfileResponseDto {
-	private final long id;
+	private final Long id;
 	private final String nickname;
 	private final String bio;
 
