@@ -1,5 +1,7 @@
 package com.example.pstagram.service.comment;
 
+import java.util.List;
+
 import jakarta.transaction.Transactional;
 
 import lombok.RequiredArgsConstructor;
@@ -46,5 +48,21 @@ public class CommentService {
 			savedComment.getUpdatedAt(),
 			savedComment.getDeletedAt()
 		);
+	}
+
+	public List<CommentResponseDto> getCommentsByPost(Long postId) {
+		List<Comment> comments = commentRepository.findAllByPostIdOrderByCreatedAtDesc(postId);
+
+		return comments.stream()
+			.map(comment -> new CommentResponseDto(
+				comment.getPost().getId(),
+				comment.getId(),
+				comment.getUser().getNickname(),
+				comment.getContent(),
+				comment.getCreatedAt(),
+				comment.getUpdatedAt(),
+				comment.getDeletedAt()
+			))
+			.toList();
 	}
 }
