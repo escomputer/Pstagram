@@ -1,6 +1,7 @@
 package com.example.pstagram.service.friend;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import lombok.RequiredArgsConstructor;
 
@@ -10,6 +11,7 @@ import com.example.pstagram.domain.friend.Friend;
 import com.example.pstagram.domain.user.User;
 import com.example.pstagram.dto.dto.friend.FriendListResponseDto;
 import com.example.pstagram.dto.dto.friend.FriendResponseDto;
+import com.example.pstagram.dto.dto.friend.FriendWaitingResponseDto;
 import com.example.pstagram.exception.friend.DuplicateFriendRequestException;
 import com.example.pstagram.exception.friend.FriendNotFoundException;
 import com.example.pstagram.exception.friend.FriendRequestNotFoundException;
@@ -80,19 +82,21 @@ public class FriendService {
 	public List<FriendListResponseDto> getFriendList(Long currentUserId) {
 		User currentUser = userService.getUser(currentUserId);
 
-		List<Friend> friendList = friendRepository.findFriendList(currentUser.getId());
 		//친구가 한명도 없을때 ! , 로그인한 사용자가 아닐때
-		return friendList;
+		return friendRepository.findFriendList(currentUser.getId())
+			.stream()
+			.map(friend -> FriendListResponseDto.fromFriend(friend, currentUserId))
+			.collect(Collectors.toList());
 	}
 
 	@Transactional(readOnly = true)
-	public List<Friend> getWaitingList(Long currentUserId) {
+	public List<FriendWaitingResponseDto> getWaitingList(Long currentUserId) {
 		User currentUser = userService.getUser(currentUserId);
 
-		List<Friend> waitingResponseDtoList = friendRepository.findAllByReceiverAndStatus_Waiting(currentUser);
-
 		//로그인한 사용자가 아닐때, 친구요청이 1명도 없을때
-		return waitingResponseDtoList;
+		return friendRepository.findAllByReceiverAndStatus_Waiting(currentUser).stream()
+			.map(FriendWaitingResponseDto::fromFriend)
+			.collect(Collectors.toList());
 	}
 
 	@Transactional
