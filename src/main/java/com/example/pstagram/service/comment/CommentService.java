@@ -49,7 +49,7 @@ public class CommentService {
 			savedComment.getDeletedAt()
 		);
 	}
-
+	@Transactional
 	public List<CommentResponseDto> getCommentsByPost(Long postId) {
 		List<Comment> comments = commentRepository.findAllByPostIdOrderByCreatedAtDesc(postId);
 
@@ -64,5 +64,22 @@ public class CommentService {
 				comment.getDeletedAt()
 			))
 			.toList();
+	}
+
+	@Transactional
+	public CommentResponseDto updateComment(Long commentId, CommentRequestDto commentRequestDto) {
+		Comment comment = commentRepository.findById(commentId).get();
+
+		comment.updateContent(commentRequestDto.getContent());
+
+		return new CommentResponseDto(
+			comment.getPost().getId(),
+			comment.getId(),
+			comment.getUser().getNickname(),
+			comment.getContent(),
+			comment.getCreatedAt(),
+			comment.getUpdatedAt(),
+			comment.getDeletedAt()
+		);
 	}
 }
