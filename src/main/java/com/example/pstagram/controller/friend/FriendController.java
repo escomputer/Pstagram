@@ -13,10 +13,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.SessionAttribute;
 import com.example.pstagram.config.MessageUtil;
-import com.example.pstagram.domain.friend.Friend;
 import com.example.pstagram.dto.dto.friend.ApiResponse;
 import com.example.pstagram.dto.dto.friend.FriendListResponseDto;
 import com.example.pstagram.dto.dto.friend.FriendResponseDto;
+import com.example.pstagram.dto.dto.friend.FriendWaitingResponseDto;
 import com.example.pstagram.service.friend.FriendService;
 
 @RestController
@@ -38,7 +38,7 @@ public class FriendController {
 	public ResponseEntity<ApiResponse<Void>> cancelRequest(@SessionAttribute(name = "userId") Long id,
 		@PathVariable Long userId) {
 		friendService.cancelRequest(id, userId);
-		String message = messageUtil.getMessage("friend.cancel.success");
+		String message = messageUtil.getMessage("friend.request.cancel");
 		return ResponseEntity.ok(new ApiResponse<>(200, message, null));
 	}
 
@@ -46,7 +46,7 @@ public class FriendController {
 	public ResponseEntity<ApiResponse<FriendResponseDto>> acceptFriend(@PathVariable Long requesterId,
 		@SessionAttribute(name = "userId") Long id) {
 		FriendResponseDto response = friendService.acceptFriend(requesterId, id);
-		String message = messageUtil.getMessage("friend.accept.success");
+		String message = messageUtil.getMessage("friend.request.accept");
 		return ResponseEntity.ok(new ApiResponse<>(200, message, response));
 	}
 
@@ -54,7 +54,7 @@ public class FriendController {
 	public ResponseEntity<ApiResponse<FriendResponseDto>> rejectFriend(@PathVariable Long requesterId,
 		@SessionAttribute(name = "userId") Long id) {
 		FriendResponseDto response = friendService.rejectFriend(requesterId, id);
-		String message = messageUtil.getMessage("friend.reject.success");
+		String message = messageUtil.getMessage("friend.request.reject");
 		return ResponseEntity.ok(new ApiResponse<>(200, message, response));
 
 	}
@@ -63,12 +63,14 @@ public class FriendController {
 	public ResponseEntity<ApiResponse<List<FriendListResponseDto>>> getFriends(
 		@SessionAttribute(name = "userId") Long id) {
 		List<FriendListResponseDto> friends = friendService.getFriendList(id);
-		return ResponseEntity.ok(new ApiResponse<>(200, null, friends));
+		String message = messageUtil.getMessage("friend.list.delete");
+		return ResponseEntity.ok(new ApiResponse<>(200, message, friends));
 	}
 
 	@GetMapping("/friend/waiting")
-	public ResponseEntity<ApiResponse<List<Friend>>> getWaitingList(@SessionAttribute(name = "userId") Long id) {
-		List<Friend> friends = friendService.getWaitingList(id);
+	public ResponseEntity<ApiResponse<List<FriendWaitingResponseDto>>> getWaitingList(
+		@SessionAttribute(name = "userId") Long id) {
+		List<FriendWaitingResponseDto> friends = friendService.getWaitingList(id);
 		return ResponseEntity.ok(new ApiResponse<>(200, null, friends));
 
 	}
