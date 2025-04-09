@@ -1,13 +1,13 @@
-package com.example.pstagram.dto.friend;
+package com.example.pstagram.dto.dto.friend;
 
 import java.time.LocalDateTime;
-
-import com.example.pstagram.domain.friend.FriendStatus;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+
+import com.example.pstagram.domain.friend.FriendStatus;
 
 // 친구 목록 반환해주는 dto
 

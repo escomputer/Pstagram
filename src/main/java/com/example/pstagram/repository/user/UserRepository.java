@@ -32,6 +32,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
 	 */
 	Optional<User> findByEmail(String email);
 
+
 		/**
 		 * 사용자 탈퇴 처리: deletedAt 컬럼을 현재 시간으로 업데이트
 		 *
