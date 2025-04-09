@@ -2,11 +2,10 @@ package com.example.pstagram.service.friend;
 
 import java.util.List;
 
-import jakarta.transaction.Transactional;
-
 import lombok.RequiredArgsConstructor;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import com.example.pstagram.domain.friend.Friend;
 import com.example.pstagram.domain.user.User;
 import com.example.pstagram.dto.dto.friend.FriendListResponseDto;
@@ -74,7 +73,7 @@ public class FriendService {
 
 	}
 
-	@Transactional
+	@Transactional(readOnly = true)
 	public List<FriendListResponseDto> getFriendList(Long currentUserId) {
 		User currentUser = getUser(currentUserId);
 
@@ -83,7 +82,7 @@ public class FriendService {
 		return friendList;
 	}
 
-	@Transactional
+	@Transactional(readOnly = true)
 	public List<FriendWaitingResponseDto> getWaitingList(Long currentUserId) {
 		User currentUser = getUser(currentUserId);
 
