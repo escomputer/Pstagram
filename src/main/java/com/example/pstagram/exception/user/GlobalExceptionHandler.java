@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 public class GlobalExceptionHandler {
 
 	private final MessageUtil messageUtil;
+// 공통으로 해보쟈
 
 	/**
 	 * 이메일 중복 예외 처리
