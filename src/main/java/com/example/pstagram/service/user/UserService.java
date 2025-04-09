@@ -11,8 +11,12 @@ import com.example.pstagram.exception.user.EmailNotFoundException;
 import com.example.pstagram.exception.user.InvalidPasswordException;
 import com.example.pstagram.exception.user.EmailAlreadyExistsException;
 import com.example.pstagram.exception.user.AlreadyDeletedUserException;
+import com.example.pstagram.exception.user.SamePasswordException;
+import com.example.pstagram.exception.user.UnauthorizedException;
 import com.example.pstagram.repository.user.UserRepository;
+import com.example.pstagram.dto.user.UpdatePasswordRequestDto;
 
+import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -98,5 +102,42 @@ public class UserService {
 
 		// Soft delete 처리
 		userRepository.softDeleteById(user.getId());
+
+
+
 	}
+
+	/**
+	 * 비밀번호 변경 처리
+	 *
+	 * @param requestDto 현재 비밀번호와 새 비밀번호
+	 * @param session    로그인한 사용자 세션
+	 */
+	@Transactional
+	public void updatePassword(UpdatePasswordRequestDto requestDto, HttpSession session) {
+		Long userId = (Long) session.getAttribute("userId");
+		if (userId == null) {
+			throw new UnauthorizedException(messageUtil.getMessage("user.unauthorized"));
+		}
+
+		User foundUser = userRepository.findById(userId)
+			.orElseThrow(() -> new EmailNotFoundException("사용자 정보를 찾을 수 없습니다."));
+
+		if (!passwordEncoder.matches(requestDto.getCurrentPassword(), foundUser.getPassword())) {
+			throw new InvalidPasswordException(messageUtil.getMessage("user.password.invalid"));
+		}
+
+		if (passwordEncoder.matches(requestDto.getNewPassword(), foundUser.getPassword())) {
+			throw new SamePasswordException(messageUtil.getMessage("user.password.same"));
+		}
+
+		String encodedNewPassword = passwordEncoder.encode(requestDto.getNewPassword());
+		foundUser.updatePassword(encodedNewPassword);
+	}
+
+
+
+
+
+
 }
