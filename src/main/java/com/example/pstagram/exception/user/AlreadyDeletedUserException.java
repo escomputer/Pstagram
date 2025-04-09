@@ -3,7 +3,7 @@ package com.example.pstagram.exception.user;
 /**
  * 이미 탈퇴한 사용자일 경우 발생하는 예외 클래스
  *
- * deletedAt != null 인 사용자에게 탈퇴 요청이 들어올 경우 사용됩니다.
+ * deletedAt != null 인 사용자에게 탈퇴 요청이 들어올 경우 사용됩니다
  */
 public class AlreadyDeletedUserException extends RuntimeException {
 

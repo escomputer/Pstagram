@@ -92,10 +92,12 @@ public class UserService {
 		User user = userRepository.findByEmail(requestDto.getEmail())
 			.orElseThrow(() -> new EmailNotFoundException(messageUtil.getMessage("user.email.not-found")));
 
+		// 이미 삭제된 유저인지 확인
 		if (user.getDeletedAt() != null) {
 			throw new AlreadyDeletedUserException(messageUtil.getMessage("user.already-deleted"));
 		}
 
+		// 비밀번호 일치 확인
 		if (!passwordEncoder.matches(requestDto.getCurrentPassword(), user.getPassword())) {
 			throw new InvalidPasswordException(messageUtil.getMessage("user.password.invalid"));
 		}
@@ -103,5 +105,7 @@ public class UserService {
 		// soft delete 처리
 		user.timeWhenDeleted();
 	}
+
+
 
 }
