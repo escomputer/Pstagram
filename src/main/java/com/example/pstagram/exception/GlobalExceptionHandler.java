@@ -25,6 +25,13 @@ import com.example.pstagram.exception.friend.FriendRequestNotFoundException;
 import com.example.pstagram.exception.friend.SelfRequestException;
 import com.example.pstagram.exception.friend.UnauthorizedException;
 import com.example.pstagram.exception.friend.UserNotFoundException;
+import com.example.pstagram.exception.comment.CommentListEmptyException;
+import com.example.pstagram.exception.comment.CommentNotFoundException;
+import com.example.pstagram.exception.comment.EmptyCommentContentException;
+import com.example.pstagram.exception.comment.EmptyUpdateContentException;
+import com.example.pstagram.exception.post.PostNotFoundException;
+import com.example.pstagram.exception.comment.UnauthorizedCommentAccessException;
+import com.example.pstagram.exception.user.UserNotFoundException;
 
 import jakarta.validation.ConstraintViolationException;
 
@@ -58,6 +65,9 @@ public class GlobalExceptionHandler {
 	public ResponseEntity<ApiResponse<Void>> handleEmailNotFound(EmailNotFoundException ex) {
 		String message = messageUtil.getMessage("user.email.not-found");
 		return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ApiResponse<>(message, null));
+	@ExceptionHandler(EmptyCommentContentException.class)
+	public ResponseEntity<String> handleEmptyCommentContent(EmptyCommentContentException ex) {
+		return ResponseEntity.badRequest().body(ex.getMessage());
 	}
 
 	@ExceptionHandler(UserNotFoundException.class)
@@ -72,6 +82,8 @@ public class GlobalExceptionHandler {
 	public ResponseEntity<ApiResponse<Void>> handleInvalidPassword(InvalidPasswordException ex) {
 		String message = messageUtil.getMessage("user.password.invalid");
 		return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new ApiResponse<>(message, null));
+	public ResponseEntity<String> handleUserNotFound(UserNotFoundException ex) {
+		return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
 	}
 
 	@ExceptionHandler(ConstraintViolationException.class)
@@ -88,6 +100,9 @@ public class GlobalExceptionHandler {
 			.body(
 				new ApiResponse<>(HttpStatus.CONFLICT.value(), messageUtil.getMessage(ex.getCode().getMessageKey()),
 					null));
+	@ExceptionHandler(PostNotFoundException.class)
+	public ResponseEntity<String> handlePostNotFound(PostNotFoundException ex) {
+		return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
 	}
 
 	@ExceptionHandler(MethodArgumentNotValidException.class)
@@ -99,6 +114,9 @@ public class GlobalExceptionHandler {
 		return ResponseEntity.status(HttpStatus.NOT_FOUND)
 			.body(new ApiResponse<>(HttpStatus.NOT_FOUND.value(), messageUtil.getMessage(ex.getCode().getMessageKey()),
 				null));
+	@ExceptionHandler(CommentNotFoundException.class)
+	public ResponseEntity<String> handleCommentNotFound(CommentNotFoundException ex) {
+		return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
 	}
 
 	@ExceptionHandler(AccessDeniedException.class)
@@ -109,6 +127,9 @@ public class GlobalExceptionHandler {
 		return ResponseEntity.status(HttpStatus.NOT_FOUND)
 			.body(new ApiResponse<>(HttpStatus.NOT_FOUND.value(), messageUtil.getMessage(ex.getCode().getMessageKey()),
 				null));
+	@ExceptionHandler(UnauthorizedCommentAccessException.class)
+	public ResponseEntity<String> handleUnauthorized(UnauthorizedCommentAccessException ex) {
+		return ResponseEntity.status(HttpStatus.FORBIDDEN).body(ex.getMessage());
 	}
 
 	@ExceptionHandler(UnauthorizedException.class)
@@ -118,6 +139,9 @@ public class GlobalExceptionHandler {
 				new ApiResponse<>(HttpStatus.UNAUTHORIZED.value(), messageUtil.getMessage(ex.getCode().getMessageKey()),
 					null));
 			.body(new ApiResponse<>(ex.getMessage(), null));
+	@ExceptionHandler(CommentListEmptyException.class)
+	public ResponseEntity<String> handleEmptyCommentList(CommentListEmptyException ex) {
+		return ResponseEntity.status(HttpStatus.NO_CONTENT).body(ex.getMessage());
 	}
 
 	@ExceptionHandler(SelfRequestException.class)
@@ -126,6 +150,9 @@ public class GlobalExceptionHandler {
 			.body(
 				new ApiResponse<>(HttpStatus.BAD_REQUEST.value(), messageUtil.getMessage(ex.getCode().getMessageKey()),
 					null));
+	@ExceptionHandler(EmptyUpdateContentException.class)
+	public ResponseEntity<String> handleEmptyUpdate(EmptyUpdateContentException ex) {
+		return ResponseEntity.badRequest().body(ex.getMessage());
 	}
 
 }
