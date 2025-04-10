@@ -7,10 +7,11 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import com.example.pstagram.domain.friend.Friend;
+import com.example.pstagram.domain.friend.FriendStatus;
 import com.example.pstagram.domain.user.User;
 
 public interface FriendRepository extends JpaRepository<Friend, Long> {
-	Optional<Friend> findByRequesterAndReciever(User requester, User reciever);
+	Optional<Friend> findByRequesterAndReceiver(User requester, User receiver);
 
 	@Query("""
 			SELECT f FROM Friend f
@@ -20,5 +21,5 @@ public interface FriendRepository extends JpaRepository<Friend, Long> {
 		""")
 	List<Friend> findFriendList(@Param("userId") Long userId);
 
-	List<Friend> findAllByReceiverAndStatus_Waiting(User receiver);
+	List<Friend> findAllByReceiverAndStatus(User receiver, FriendStatus status);
 }
