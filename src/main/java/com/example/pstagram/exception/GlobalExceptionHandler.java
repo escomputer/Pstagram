@@ -1,7 +1,11 @@
-package com.example.pstagram.exception.user;
+package com.example.pstagram.exception;
 
 import com.example.pstagram.config.MessageUtil;
 import com.example.pstagram.dto.common.ApiResponse;
+import com.example.pstagram.exception.user.AlreadyDeletedUserException;
+import com.example.pstagram.exception.user.EmailAlreadyExistsException;
+import com.example.pstagram.exception.user.EmailNotFoundException;
+import com.example.pstagram.exception.user.InvalidPasswordException;
 
 import lombok.RequiredArgsConstructor;
 
