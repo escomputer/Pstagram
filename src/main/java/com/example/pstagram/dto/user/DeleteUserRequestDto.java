@@ -17,11 +17,18 @@ public class DeleteUserRequestDto {
 	 */
 	@Email(message = "이메일 형식이 아닙니다.")
 	@NotBlank(message = "이메일은 필수입니다.")
-	private String email;
+	private final String email;
 
 	/**
 	 * 본인 확인용 현재 비밀번호
 	 */
 	@NotBlank(message = "현재 비밀번호는 필수입니다.")
-	private String currentPassword;
+	private final String currentPassword;
+
+	public DeleteUserRequestDto(String email, String currentPassword) {
+		this.email = email;
+		this.currentPassword = currentPassword;
+	}
+
+	// fix : 불변 객체
 }
