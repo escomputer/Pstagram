@@ -11,31 +11,38 @@ import com.example.pstagram.repository.profile.UserRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 
+/**
+ * 프로필 관련 비즈니스 로직을 처리하는 서비스
+ */
 @Service
 @RequiredArgsConstructor
 public class ProfileService {
 	private final UserRepository userRepository;
 
-	public ProfileResponseDto test(String email, String password, String nickname, String bio) {
+	// public ProfileResponseDto test(String email, String password, String nickname, String bio) {
+	//
+	// 	User user = new User(email, password, nickname, bio); // User 엔티티 생성
+	//
+	// 	User savedUser = userRepository.save(user); // 데이터베이스에 저장
+	//
+	// 	// 생성된 사용자 정보를 SignUpUserResponseDto 로 변환하여 반환
+	// 	return new ProfileResponseDto(
+	// 		savedUser.getId(),
+	// 		savedUser.getEmail(),
+	// 		null,
+	// 		savedUser.getNickname(),
+	// 		savedUser.getBio(),
+	// 		savedUser.getCreatedAt(),
+	// 		null
+	// 	);
+	//
+	// }
 
-		User user = new User(email, password, nickname, bio); // User 엔티티 생성
-
-		User savedUser = userRepository.save(user); // 데이터베이스에 저장
-
-		// 생성된 사용자 정보를 SignUpUserResponseDto 로 변환하여 반환
-		return new ProfileResponseDto(
-			savedUser.getId(),
-			savedUser.getEmail(),
-			null,
-			savedUser.getNickname(),
-			savedUser.getBio(),
-			savedUser.getCreatedAt(),
-			null
-		);
-
-	}
-
-	//유저 id로 유저 조회
+	/**
+	 * ID로 사용자 조회
+	 * @param id 조회할 사용자 ID
+	 * @return 사용자 정보 DTO
+	 */
 	public ViewProfileResponseDto findById(Long id) {
 
 		Optional<User> optionalUser = userRepository.findById(id); // ID로 User 엔티티 조회
@@ -50,6 +57,11 @@ public class ProfileService {
 
 	}
 
+	/**
+	 * 사용자 정보 수정
+	 * @param id 수정할 사용자 ID
+	 * @param requestDto 수정할 사용자 정보 DTO
+	 */
 	@Transactional
 	public void update(Long id, UpdateProfileRequestDto requestDto) {
 

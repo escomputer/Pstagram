@@ -5,41 +5,31 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.SessionAttribute;
 
-import com.example.pstagram.dto.profile.CreatetestProfileRequestDto;
-import com.example.pstagram.dto.profile.ProfileResponseDto;
 import com.example.pstagram.dto.profile.UpdateProfileRequestDto;
 import com.example.pstagram.dto.profile.ViewProfileResponseDto;
 import com.example.pstagram.service.profile.ProfileService;
 
 import lombok.RequiredArgsConstructor;
 
+/**
+ * 프로필 관련 API를 제공하는 컨트롤러
+ */
 @RestController
 @RequestMapping("/api/users")
 @RequiredArgsConstructor
 public class ProfileController {
 	private final ProfileService profileService;
 
-//test용 회원 생성
-	//후에 회원가입 기능과 합칠 때 삭제
-	// @PostMapping("/test")
-	// public ResponseEntity<ProfileResponseDto> test(@RequestBody CreatetestProfileRequestDto requestDto) {
-	// 	ProfileResponseDto profileResponseDto =
-	// 		profileService.test(
-	// 			requestDto.getEmail(),
-	// 			requestDto.getPassword(),
-	// 			requestDto.getNickname(),
-	// 			requestDto.getBio()
-	// 		);
-	// 	return new ResponseEntity<>(profileResponseDto, HttpStatus.CREATED);
-	// }
-
-	//id로 유저 조회
+	/**
+	 * ID로 사용자 조회
+	 * @param id 조회할 사용자 ID
+	 * @return 사용자 정보 DTO와 OK 응답
+	 */
 	@GetMapping("/{id}")
 	public  ResponseEntity<ViewProfileResponseDto> findById(@PathVariable Long id){
 
@@ -47,16 +37,21 @@ public class ProfileController {
 
 		return new ResponseEntity<>(viewProfileResponseDto, HttpStatus.OK);
 	}
-
+	/**
+	 * 사용자 정보 수정
+	 * @param id 수정할 사용자 ID (세션에서 가져옴)
+	 * @param requestDto 수정할 사용자 정보
+	 * @return 성공시 OK 응답
+	 */
 	//현재 주어진 id에 해당하는 유저가 password를 통해 인증하여 수정할 수 있음
 	//sesson을 통해 정보를 불러 오도록 수정 예정
 	@PatchMapping("/{id}")
 	public ResponseEntity<Void> update(@SessionAttribute(name="userId") Long id, @RequestBody UpdateProfileRequestDto requestDto) {
 
-		// UserService를 통해 주어진 id에 해당하는 유저의 이메일을 수정합니다.
+		// UserService를 통해 주어진 id에 해당하는 유저의 이메일을 수정
 		profileService.update(id, requestDto);
 
-		// 유저 정보 수정 성공 응답을 반환합니다.
+		// 유저 정보 수정 성공 응답을 반환
 		return new ResponseEntity<>(HttpStatus.OK);
 		//return ResponseEntity.ok(new ApiResponse<>(200, message, response));
 	}
