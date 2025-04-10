@@ -23,6 +23,13 @@ import com.example.pstagram.exception.user.InvalidPasswordException;
 import com.example.pstagram.exception.user.SamePasswordException;
 import com.example.pstagram.exception.user.UnauthorizedException;
 import com.example.pstagram.repository.user.UserRepository;
+import com.example.pstagram.dto.user.UpdatePasswordRequestDto;
+
+import jakarta.servlet.http.HttpSession;
+import lombok.RequiredArgsConstructor;
+
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  * 사용자 인증 및 회원 관련 비즈니스 로직을 처리하는 서비스 클래스
@@ -116,7 +123,7 @@ public class UserService {
 	 */
 	@Transactional
 	public void updatePassword(UpdatePasswordRequestDto requestDto, HttpSession session) {
-		Long userId = (Long)session.getAttribute("userId");
+		Long userId = (Long) session.getAttribute("userId");
 		if (userId == null) {
 			throw new UnauthorizedException(messageUtil.getMessage("user.unauthorized"));
 		}

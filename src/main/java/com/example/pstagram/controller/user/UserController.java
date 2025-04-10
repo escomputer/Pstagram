@@ -17,6 +17,7 @@ import com.example.pstagram.dto.common.ApiResponse;
 import com.example.pstagram.dto.user.DeleteUserRequestDto;
 import com.example.pstagram.dto.user.LoginRequestDto;
 import com.example.pstagram.dto.user.SignUpRequestDto;
+import com.example.pstagram.dto.user.UpdatePasswordRequestDto;
 import com.example.pstagram.dto.user.UserResponseDto;
 import com.example.pstagram.exception.user.UnauthorizedException;
 import com.example.pstagram.service.user.UserService;
@@ -89,7 +90,7 @@ public class UserController {
 	public ResponseEntity<ApiResponse<Void>> deleteUser(@Valid @RequestBody DeleteUserRequestDto requestDto,
 		HttpSession session) {
 
-		Long userId = (Long)session.getAttribute("userId");
+		Long userId = (Long)session.getAttribute("userId"); // session attri.
 		if (userId == null) {
 			throw new UnauthorizedException(messageUtil.getMessage("user.unauthorized"));
 		}
@@ -100,4 +101,17 @@ public class UserController {
 		String message = messageUtil.getMessage("user.delete.success");
 		return ResponseEntity.ok(new ApiResponse<>(200, message, null));
 	}
+
+	/**
+	 * 비밀번호 변경 API
+	 */
+	@PutMapping("/password")
+	public ResponseEntity<ApiResponse<Void>> updatePassword(
+		@Valid @RequestBody UpdatePasswordRequestDto requestDto,
+		HttpSession session) {
+		userService.updatePassword(requestDto, session);
+		String message = messageUtil.getMessage("user.password.updated"); //
+		return ResponseEntity.ok(new ApiResponse<>(message, null));
+	}
+
 }
