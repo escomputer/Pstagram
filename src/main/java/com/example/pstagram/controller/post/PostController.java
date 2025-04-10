@@ -10,10 +10,11 @@ import com.example.pstagram.service.post.PostService;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+
 import org.springframework.web.bind.annotation.*;
 
 /**
- * 게시물 관련 요청을 처리하는 컨트롤러
+ * 게시물 관련 요청을 처리하는 컨트롤러 클래스
  */
 @RestController
 @RequiredArgsConstructor
@@ -22,8 +23,6 @@ public class PostController {
 
 	private final PostService postService;
 	private final MessageUtil messageUtil;
-
-
 
 	/**
 	 * 게시물 등록 API
@@ -38,7 +37,8 @@ public class PostController {
 		HttpSession session
 	) {
 		PostResponseDto response = postService.createPost(requestDto, session);
-		return new ApiResponse<>("게시물이 성공적으로 등록되었습니다.", response);
+		String message = messageUtil.getMessage("post.create.success");
+		return new ApiResponse<>(message, response);
 	}
 
 	/**
@@ -54,7 +54,8 @@ public class PostController {
 		@RequestParam(defaultValue = "10") int size
 	) {
 		PostListResponseDto response = postService.getPostsSortedByCreatedAt(page, size);
-		return new ApiResponse<>("게시물 목록 조회 성공", response);
+		String message = messageUtil.getMessage("post.list.success");
+		return new ApiResponse<>(message, response);
 	}
 
 	/**
@@ -63,6 +64,7 @@ public class PostController {
 	 * @param postId 수정할 게시물 ID
 	 * @param requestDto 수정할 내용
 	 * @param session 로그인한 사용자 세션
+	 * @return 수정된 게시물 응답 DTO
 	 */
 	@PutMapping("/{postId}")
 	public ApiResponse<PostResponseDto> updatePost(
@@ -71,7 +73,8 @@ public class PostController {
 		HttpSession session
 	) {
 		PostResponseDto response = postService.updatePost(postId, requestDto, session);
-		return new ApiResponse<>("게시물이 성공적으로 수정되었습니다.", response);
+		String message = messageUtil.getMessage("post.update.success");
+		return new ApiResponse<>(message, response);
 	}
 
 	/**
@@ -87,8 +90,7 @@ public class PostController {
 		HttpSession session
 	) {
 		postService.deletePost(postId, session);
-		String message = messageUtil.getMessage("post.deleted");
+		String message = messageUtil.getMessage("post.delete.success");
 		return new ApiResponse<>(message, null);
 	}
-
 }

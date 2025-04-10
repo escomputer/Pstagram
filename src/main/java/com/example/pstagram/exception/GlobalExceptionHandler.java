@@ -2,6 +2,8 @@ package com.example.pstagram.exception;
 
 import com.example.pstagram.config.MessageUtil;
 import com.example.pstagram.dto.common.ApiResponse;
+import com.example.pstagram.exception.post.PostNotFoundException;
+import com.example.pstagram.exception.post.UnauthorizedPostAccessException;
 import com.example.pstagram.exception.user.AlreadyDeletedUserException;
 import com.example.pstagram.exception.user.EmailAlreadyExistsException;
 import com.example.pstagram.exception.user.EmailNotFoundException;
@@ -58,4 +60,17 @@ public class GlobalExceptionHandler {
 		return ResponseEntity.status(HttpStatus.CONFLICT)
 			.body(new ApiResponse<>(ex.getMessage(), null));
 	}
+
+	@ExceptionHandler(PostNotFoundException.class)
+	public ResponseEntity<ApiResponse<Void>> handlePostNotFound(PostNotFoundException e) {
+		return ResponseEntity.status(HttpStatus.NOT_FOUND)
+			.body(new ApiResponse<>(e.getMessage(), null));
+	}
+
+	@ExceptionHandler(UnauthorizedPostAccessException.class)
+	public ResponseEntity<ApiResponse<Void>> handlePostUnauthorized(UnauthorizedPostAccessException e) {
+		return ResponseEntity.status(HttpStatus.FORBIDDEN)
+			.body(new ApiResponse<>(e.getMessage(), null));
+	}
+
 }
