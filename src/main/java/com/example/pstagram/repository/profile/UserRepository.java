@@ -23,9 +23,11 @@ public interface UserRepository extends JpaRepository<User, Long> {
 	 * @param id 조회할 id
 	 * @return 해당 id의 사용자 정보
 	 */
-	default User findByIdOrElseTrow(Long id){
-		return findById(id).orElseThrow(()-> new ResponseStatusException(HttpStatus.NOT_FOUND, "Does not exist id = " + id));
+	default User findByIdOrElseTrow(Long id) {
+		return findById(id).orElseThrow(
+			() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Does not exist id = " + id));
 	}
+
 	/**
 	 * 입력된 이메일이 이미 존재하는지 여부를 확인
 	 *
@@ -42,15 +44,14 @@ public interface UserRepository extends JpaRepository<User, Long> {
 	 */
 	Optional<User> findByEmail(String email);
 
-
-		/**
-		 * 사용자 탈퇴 처리: deletedAt 컬럼을 현재 시간으로 업데이트
-		 *
-		 * @param id 탈퇴할 사용자 ID
-		 */
-		@Modifying
-		@Transactional
-		@Query("UPDATE User u SET u.deletedAt = CURRENT_TIMESTAMP WHERE u.id = :id")
-		void softDeleteById(@Param("id") Long id)
-;
+	/**
+	 * 사용자 탈퇴 처리: deletedAt 컬럼을 현재 시간으로 업데이트
+	 *
+	 * @param id 탈퇴할 사용자 ID
+	 */
+	@Modifying
+	@Transactional
+	@Query("UPDATE User u SET u.deletedAt = CURRENT_TIMESTAMP WHERE u.id = :id")
+	void softDeleteById(@Param("id") Long id)
+	;
 }

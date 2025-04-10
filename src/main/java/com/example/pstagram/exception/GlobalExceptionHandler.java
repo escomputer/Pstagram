@@ -8,7 +8,6 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 //접근 권한 예외
 import org.springframework.security.access.AccessDeniedException;
 
-
 import jakarta.validation.ConstraintViolationException;
 
 @ControllerAdvice
@@ -25,7 +24,8 @@ public class GlobalExceptionHandler {
 
 	@ExceptionHandler(MethodArgumentNotValidException.class)
 	public ResponseEntity<String> handleValidationException(MethodArgumentNotValidException ex) {
-		return new ResponseEntity<>("@Valid failed: " + ex.getBindingResult().getFieldError().getDefaultMessage(), HttpStatus.BAD_REQUEST);
+		return new ResponseEntity<>("@Valid failed: " + ex.getBindingResult().getFieldError().getDefaultMessage(),
+			HttpStatus.BAD_REQUEST);
 	}
 
 	@ExceptionHandler(AccessDeniedException.class)
@@ -37,6 +37,5 @@ public class GlobalExceptionHandler {
 	public ResponseEntity<String> handleResourceNotFoundException(ResourceNotFoundException ex) {
 		return ResponseEntity.status(HttpStatus.NOT_FOUND).body("요청한 리소스를 찾을 수 없습니다.");
 	}
-
 
 }

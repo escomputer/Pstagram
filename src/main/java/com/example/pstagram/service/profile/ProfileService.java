@@ -1,7 +1,9 @@
 package com.example.pstagram.service.profile;
 
 import java.util.Optional;
+
 import org.springframework.stereotype.Service;
+
 import com.example.pstagram.domain.user.User;
 import com.example.pstagram.dto.profile.ProfileResponseDto;
 import com.example.pstagram.dto.profile.UpdateProfileRequestDto;
