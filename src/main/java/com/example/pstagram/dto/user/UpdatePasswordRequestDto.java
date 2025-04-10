@@ -5,20 +5,28 @@ import jakarta.validation.constraints.Pattern;
 import lombok.Getter;
 
 /**
- * 비밀번호 변경 요청 DTO
+ * 비밀번호 변경 요청을 처리하는 DTO 클래스입니다.
+ *
+ * - 현재 비밀번호, 새 비밀번호를 입력받고 유효성 검사를 수행합니다.
  */
+
 @Getter
 public class UpdatePasswordRequestDto {
 
-	@NotBlank(message = "현재 비밀번호는 필수입니다.")
+	/**
+	 * 현재 비밀번호 (필수)
+	 */
+	@NotBlank(message = "{user.password.required}")
 	private final String currentPassword;
 
-
-
-	@NotBlank(message = "새 비밀번호는 필수입니다.")
+	/**
+	 * 새 비밀번호
+	 * - 8자 이상, 영문/숫자/특수문자 포함
+	 */
+	@NotBlank(message = "{user.password.required}")
 	@Pattern(
 		regexp = "^(?=.*[A-Za-z])(?=.*\\d)(?=.*[!@#$%^&*])[A-Za-z\\d!@#$%^&*]{8,}$",
-		message = "비밀번호는 8자 이상, 영문/숫자/특수문자를 포함해야 합니다."
+		message = "{user.password.invalid-format}"
 	)
 	private final String newPassword;
 
@@ -26,8 +34,4 @@ public class UpdatePasswordRequestDto {
 		this.currentPassword = currentPassword;
 		this.newPassword = newPassword;
 	}
-
-	// fix : ㅂㅂㄱㅊ
-
 }
-
