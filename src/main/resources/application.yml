@@ -1,9 +1,4 @@
 spring:
-  datasource:
-    url: jdbc:h2:mem:testdb
-    driver-class-name: org.h2.Driver
-    username: sa
-    password:
   jpa:
     hibernate:
       ddl-auto: create
@@ -16,10 +11,8 @@ spring:
         dialect: org.hibernate.dialect.MySQLDialect
   application:
     name: Pstagram
-
   profiles:
     active: local
-
 
 logging:
   level:
@@ -28,5 +21,3 @@ logging:
 messages:
   basename: messages
   encoding: UTF-8
-
-
