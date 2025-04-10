@@ -2,13 +2,12 @@ package com.example.pstagram.repository.user;
 
 import java.util.Optional;
 
-import com.example.pstagram.domain.user.User;
-
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.transaction.annotation.Transactional;
+import com.example.pstagram.domain.user.User;
 
 /**
  * 사용자(User) 엔티티에 대한 데이터베이스 접근을 담당하는 레포지토리
@@ -32,15 +31,14 @@ public interface UserRepository extends JpaRepository<User, Long> {
 	 */
 	Optional<User> findByEmail(String email);
 
-
-		/**
-		 * 사용자 탈퇴 처리: deletedAt 컬럼을 현재 시간으로 업데이트
-		 *
-		 * @param id 탈퇴할 사용자 ID
-		 */
-		@Modifying
-		@Transactional
-		@Query("UPDATE User u SET u.deletedAt = CURRENT_TIMESTAMP WHERE u.id = :id")
-		void softDeleteById(@Param("id") Long id)
-;
+	/**
+	 * 사용자 탈퇴 처리: deletedAt 컬럼을 현재 시간으로 업데이트
+	 *
+	 * @param id 탈퇴할 사용자 ID
+	 */
+	@Modifying
+	@Transactional
+	@Query("UPDATE User u SET u.deletedAt = CURRENT_TIMESTAMP WHERE u.id = :id")
+	void softDeleteById(@Param("id") Long id)
+	;
 }

@@ -1,21 +1,25 @@
 package com.example.pstagram.controller.user;
 
+import jakarta.servlet.http.HttpSession;
+import jakarta.validation.Valid;
+
+import lombok.RequiredArgsConstructor;
+
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 import com.example.pstagram.config.MessageUtil;
 import com.example.pstagram.dto.common.ApiResponse;
 import com.example.pstagram.dto.user.DeleteUserRequestDto;
 import com.example.pstagram.dto.user.LoginRequestDto;
 import com.example.pstagram.dto.user.SignUpRequestDto;
 import com.example.pstagram.dto.user.UserResponseDto;
-import com.example.pstagram.service.user.UserService;
 import com.example.pstagram.exception.user.UnauthorizedException;
-
-import jakarta.servlet.http.HttpSession;
-import jakarta.validation.Valid;
-import lombok.RequiredArgsConstructor;
-
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import com.example.pstagram.service.user.UserService;
 
 /**
  * 사용자 관련 API 요청을 처리하는 컨트롤러
@@ -39,7 +43,7 @@ public class UserController {
 	public ResponseEntity<ApiResponse<UserResponseDto>> signup(@Valid @RequestBody SignUpRequestDto requestDto) {
 		UserResponseDto responseDto = userService.signup(requestDto);
 		String message = messageUtil.getMessage("user.signup.success");
-		return ResponseEntity.status(HttpStatus.CREATED).body(new ApiResponse<>(message, responseDto));
+		return ResponseEntity.status(HttpStatus.CREATED).body(new ApiResponse<>(200, message, responseDto));
 	}
 
 	/**
@@ -58,7 +62,7 @@ public class UserController {
 		session.setAttribute("userId", user.getId());
 
 		String message = messageUtil.getMessage("user.login.success");
-		return ResponseEntity.ok(new ApiResponse<>(message, user));
+		return ResponseEntity.ok(new ApiResponse<>(200, message, user));
 	}
 
 	/**
@@ -71,7 +75,7 @@ public class UserController {
 	public ResponseEntity<ApiResponse<Void>> logout(HttpSession session) {
 		session.invalidate(); // 세션 무효화
 		String message = messageUtil.getMessage("user.logout.success");
-		return ResponseEntity.ok(new ApiResponse<>(message, null));
+		return ResponseEntity.ok(new ApiResponse<>(200, message, null));
 	}
 
 	/**
@@ -90,15 +94,10 @@ public class UserController {
 			throw new UnauthorizedException(messageUtil.getMessage("user.unauthorized"));
 		}
 
-		// 세션이 없거나 userId가 없는 경우 → 로그인 안 된 상태
-		if (userId == null) {
-			throw new UnauthorizedException(messageUtil.getMessage("user.unauthorized"));
-		}
-
 		userService.deleteUser(requestDto);
 
 		// 탈퇴 완료 메시지 반환
 		String message = messageUtil.getMessage("user.delete.success");
-		return ResponseEntity.ok(new ApiResponse<>(message, null));
+		return ResponseEntity.ok(new ApiResponse<>(200, message, null));
 	}
 }

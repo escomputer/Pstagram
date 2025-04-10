@@ -6,6 +6,7 @@ import lombok.RequiredArgsConstructor;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import com.example.pstagram.common.ResponseCode;
 import com.example.pstagram.config.MessageUtil;
 import com.example.pstagram.config.PasswordEncoder;
 import com.example.pstagram.domain.user.User;
@@ -136,7 +137,8 @@ public class UserService {
 	}
 
 	public User getUser(Long userId) {
-		return userRepository.findById(userId).orElseThrow(() -> new UserNotFoundException("해당하는 유저가 없습니다."));
+		return userRepository.findById(userId)
+			.orElseThrow(() -> new UserNotFoundException(ResponseCode.FRIEND_NOT_FOUND));
 	}
 
 }
