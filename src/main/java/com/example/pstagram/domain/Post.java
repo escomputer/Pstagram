@@ -1,4 +1,4 @@
-package com.example.pstagram.domain.post;
+package com.example.pstagram.domain;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
