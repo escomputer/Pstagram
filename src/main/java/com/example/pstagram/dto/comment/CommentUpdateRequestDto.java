@@ -4,7 +4,8 @@ import lombok.Getter;
 
 @Getter
 public class CommentUpdateRequestDto {
-	private String content;
+
+	private final String content;
 
 	public CommentUpdateRequestDto(String content) {
 		this.content = content;

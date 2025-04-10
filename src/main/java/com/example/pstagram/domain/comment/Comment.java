@@ -47,5 +47,6 @@ public class Comment extends Base {
 
 	public void updateContent(String content) {
 		this.content = content;
+
 	}
 }

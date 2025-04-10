@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import com.example.pstagram.dto.comment.CommentRequestDto;
@@ -20,38 +21,52 @@ import com.example.pstagram.service.comment.CommentService;
 
 @RestController
 @RequiredArgsConstructor
+@RequestMapping("/api/posts/{postId}")
 public class CommentController {
 
-	private CommentService commentService;
+	private final CommentService commentService;
 
-	@PostMapping("/api/posts/{postId}/comments")
+	@PostMapping("/comments")
 	public ResponseEntity<CommentResponseDto> save(
 		@PathVariable Long postId,
 		@RequestParam Long userId,
-		@RequestBody CommentRequestDto commentRequestDto) {
+		@RequestBody CommentRequestDto commentRequestDto){
 
-		CommentResponseDto commentResponseDto = commentService.save(userId, postId, commentRequestDto);
-		return new ResponseEntity<>(commentResponseDto, HttpStatus.CREATED);
+		// CommentResponseDto commentResponseDto = commentService.save(userId, postId, commentRequestDto);
+		// return new ResponseEntity<>(commentResponseDto, HttpStatus.CREATED);
+
+		return ResponseEntity.ok(commentService.save(userId,postId,commentRequestDto));
 	}
 
-	@GetMapping("/api/posts/{postId}/comments")
+	@GetMapping("/comments")
 	public ResponseEntity<List<CommentResponseDto>> findByPost(@PathVariable Long postId) {
-		List<CommentResponseDto> commentResponseDtoList = commentService.getCommentsByPost(postId);
-		return new ResponseEntity<>(commentResponseDtoList, HttpStatus.OK);
+		// List<CommentResponseDto> commentResponseDtoList = commentService.getCommentsByPost(postId);
+		// return new ResponseEntity<>(commentResponseDtoList, HttpStatus.OK); // 팀원들과 형태 맞추기!!
+
+		return ResponseEntity.ok(commentService.getCommentsByPost(postId));
 	}
 
-	@PutMapping("api/posts/{postId}/comments/{commentId}")
-	public ResponseEntity<CommentResponseDto> updateComment(@PathVariable Long commentId,
+	@PutMapping("/comments/{commentId}")
+	public ResponseEntity<CommentResponseDto> updateComment(
+		@PathVariable Long commentId,
+		 @RequestParam Long userId,
+		// @PathVariable Long postId,
 		@RequestBody CommentRequestDto commentRequestDto) {
 
-		CommentResponseDto updateComment = commentService.updateComment(commentId, commentRequestDto);
-		return new ResponseEntity<>(updateComment, HttpStatus.OK);
+		// CommentResponseDto updateComment = commentService.updateComment(commentId, commentRequestDto);
+		// return new ResponseEntity<>(updateComment, HttpStatus.OK);
+
+		return ResponseEntity.ok(commentService.updateComment(commentId,userId,commentRequestDto));
 	}
 
-	@DeleteMapping("/api/posts/{postId}/comments/{commentId}")
-	public ResponseEntity<Void> deleteComment(@PathVariable Long commentId) {
-		commentService.deleteComment(commentId);
-		return new ResponseEntity<>(HttpStatus.OK);
+	@DeleteMapping("/comments/{commentId}")
+	public ResponseEntity<Void> deleteComment(
+		@PathVariable Long commentId,
+		@PathVariable Long postId,
+		@RequestParam Long userId) {
+		// commentService.deleteComment(commentId);
+		// return new ResponseEntity<>(HttpStatus.OK);
+		commentService.deleteComment(userId, commentId);
+		return ResponseEntity.noContent().build();
 	}
-
 }
