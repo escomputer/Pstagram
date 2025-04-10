@@ -3,6 +3,7 @@ package com.example.pstagram.repository.user;
 import java.util.Optional;
 
 import com.example.pstagram.domain.user.User;
+import com.example.pstagram.exception.user.EmailNotFoundException;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
@@ -32,15 +33,21 @@ public interface UserRepository extends JpaRepository<User, Long> {
 	 */
 	Optional<User> findByEmail(String email);
 
+	/**
+	 * 사용자 탈퇴 처리: deletedAt 컬럼을 현재 시간으로 업데이트
+	 *
+	 * @param id 탈퇴할 사용자 ID
+	 */
+	@Modifying
+	@Transactional
+	@Query("UPDATE User u SET u.deletedAt = CURRENT_TIMESTAMP WHERE u.id = :id")
+	void softDeleteById(@Param("id") Long id);
 
-		/**
-		 * 사용자 탈퇴 처리: deletedAt 컬럼을 현재 시간으로 업데이트
-		 *
-		 * @param id 탈퇴할 사용자 ID
-		 */
-		@Modifying
-		@Transactional
-		@Query("UPDATE User u SET u.deletedAt = CURRENT_TIMESTAMP WHERE u.id = :id")
-		void softDeleteById(@Param("id") Long id)
-;
+	// default 메소드
+	// 사용예 : User user = userRepository.findByIdOrThrow(userId);
+	default User findByIdOrThrow(Long id) {
+		return findById(id)
+			.orElseThrow(() -> new EmailNotFoundException("사용자를 찾을 수 없습니다."));
+	}
+
 }
