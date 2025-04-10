@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.SessionAttribute;
 import com.example.pstagram.dto.comment.CommentRequestDto;
 import com.example.pstagram.dto.comment.CommentResponseDto;
 import com.example.pstagram.service.comment.CommentService;
@@ -29,7 +30,7 @@ public class CommentController {
 	@PostMapping("/comments")
 	public ResponseEntity<CommentResponseDto> save(
 		@PathVariable Long postId,
-		@RequestParam Long userId,
+		@SessionAttribute(name="userId") Long userId,
 		@RequestBody CommentRequestDto commentRequestDto){
 
 		// CommentResponseDto commentResponseDto = commentService.save(userId, postId, commentRequestDto);
@@ -49,8 +50,8 @@ public class CommentController {
 	@PutMapping("/comments/{commentId}")
 	public ResponseEntity<CommentResponseDto> updateComment(
 		@PathVariable Long commentId,
-		 @RequestParam Long userId,
-		// @PathVariable Long postId,
+		@SessionAttribute(name="userId") Long userId,
+		@PathVariable Long postId,
 		@RequestBody CommentRequestDto commentRequestDto) {
 
 		// CommentResponseDto updateComment = commentService.updateComment(commentId, commentRequestDto);
@@ -63,7 +64,7 @@ public class CommentController {
 	public ResponseEntity<Void> deleteComment(
 		@PathVariable Long commentId,
 		@PathVariable Long postId,
-		@RequestParam Long userId) {
+		@SessionAttribute(name="userId") Long userId) {
 		// commentService.deleteComment(commentId);
 		// return new ResponseEntity<>(HttpStatus.OK);
 		commentService.deleteComment(userId, commentId);
