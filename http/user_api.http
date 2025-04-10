@@ -1,4 +1,5 @@
 ### 회원가입
+# @no-cookie-jar
 POST http://localhost:8080/api/users/signup
 Content-Type: application/json
 
@@ -11,24 +12,26 @@ Content-Type: application/json
 ###
 
 ### 로그인
+# @no-cookie-jar
 POST http://localhost:8080/api/users/login
 Content-Type: application/json
 
 {
   "email": "test@example.com",
-  "password": "Newpass123!"
+  "password": "Abcd1234!"
 }
 > {% //response handler client
-    client.global.set("jession", s.headers.valueOf("Set-Cookie").split(";")[0].split("=")[1]);
-    client.log("jession : " + client.global.get("jession")); // (2)
+    client.global.set("JSESSIONID", response.headers.valueOf("Set-Cookie").split(";")[0].split("=")[1]);
+    client.log("JSESSIONID : " + client.global.get("JSESSIONID")); // (2)
 %}
 
 ###
 
 ### 비밀번호 변경
+# @no-cookie-jar
 PUT http://localhost:8080/api/users/password
 Content-Type: application/json
-
+Cookie: JSESSIONID={{JSESSIONID}}
 
 {
   "currentPassword": "Abcd1234!",
@@ -38,9 +41,10 @@ Content-Type: application/json
 ###
 
 ### 회원탈퇴
+# @no-cookie-jar
 DELETE http://localhost:8080/api/users/delete
 Content-Type: application/json
-Cookie: JSESSIONID={{jession}}
+Cookie: JSESSIONID={{JSESSIONID}}
 
 {
   "email": "test@example.com",
