@@ -1,0 +1,48 @@
+### 회원가입
+POST http://localhost:8080/api/users/signup
+Content-Type: application/json
+
+{
+  "email": "test@example.com",
+  "password": "Abcd1234!",
+  "nickname": "슬몽몽"
+}
+
+###
+
+### 로그인
+POST http://localhost:8080/api/users/login
+Content-Type: application/json
+
+{
+  "email": "test@example.com",
+  "password": "Newpass123!"
+}
+> {% //response handler client
+    client.global.set("jession", s.headers.valueOf("Set-Cookie").split(";")[0].split("=")[1]);
+    client.log("jession : " + client.global.get("jession")); // (2)
+%}
+
+###
+
+### 비밀번호 변경
+PUT http://localhost:8080/api/users/password
+Content-Type: application/json
+
+
+{
+  "currentPassword": "Abcd1234!",
+  "newPassword": "Newpass123!"
+}
+
+###
+
+### 회원탈퇴
+DELETE http://localhost:8080/api/users/delete
+Content-Type: application/json
+Cookie: JSESSIONID={{jession}}
+
+{
+  "email": "test@example.com",
+  "currentPassword": "Newpass123!"
+}
