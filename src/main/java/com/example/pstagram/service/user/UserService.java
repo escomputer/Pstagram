@@ -18,6 +18,7 @@ import com.example.pstagram.dto.user.UpdatePasswordRequestDto;
 
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
+
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -103,8 +104,6 @@ public class UserService {
 		// Soft delete 처리
 		userRepository.softDeleteById(user.getId());
 
-
-
 	}
 
 	/**
@@ -115,7 +114,7 @@ public class UserService {
 	 */
 	@Transactional
 	public void updatePassword(UpdatePasswordRequestDto requestDto, HttpSession session) {
-		Long userId = (Long) session.getAttribute("userId");
+		Long userId = (Long)session.getAttribute("userId");
 		if (userId == null) {
 			throw new UnauthorizedException(messageUtil.getMessage("user.unauthorized"));
 		}
@@ -134,10 +133,5 @@ public class UserService {
 		String encodedNewPassword = passwordEncoder.encode(requestDto.getNewPassword());
 		foundUser.updatePassword(encodedNewPassword);
 	}
-
-
-
-
-
 
 }
