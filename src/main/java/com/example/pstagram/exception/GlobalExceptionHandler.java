@@ -33,9 +33,5 @@ public class GlobalExceptionHandler {
 		return ResponseEntity.status(HttpStatus.FORBIDDEN).body("접근 권한이 없습니다.");
 	}
 
-	@ExceptionHandler(ResoursNoFoundException.class)
-	public ResponseEntity<String> handleResourceNotFoundException(ResourceNotFoundException ex) {
-		return ResponseEntity.status(HttpStatus.NOT_FOUND).body("요청한 리소스를 찾을 수 없습니다.");
-	}
 
 }
