@@ -38,7 +38,6 @@ public class CommentService {
 			throw new EmptyCommentContentException(ResponseCode.COMMENT_EMPTY);
 		}
 
-
 		User user = userRepository.findById(userId)
 
 			.orElseThrow(() -> new UserNotFoundException(ResponseCode.USER_NOT_FOUND));
@@ -94,7 +93,6 @@ public class CommentService {
 			throw new EmptyUpdateContentException(ResponseCode.COMMENT_EMPTY_UPDATE);
 		}
 
-
 		Comment comment = commentRepository.findById(commentId)
 			.orElseThrow(() -> new CommentNotFoundException(ResponseCode.POST_NOT_FOUND));
 
@@ -116,7 +114,6 @@ public class CommentService {
 	}
 
 	public void deleteComment(Long commentId, Long userId) {
-
 
 		Comment comment = commentRepository.findById(commentId)
 			.orElseThrow(() -> new CommentNotFoundException(ResponseCode.COMMENT_NOT_FOUND));
