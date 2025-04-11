@@ -136,7 +136,7 @@ public class PostService {
 	 * 게시물 삭제
 	 *
 	 * @param postId 삭제할 게시물 ID
-	 * @param session 로그인한 사용자
+	 * @param userId 로그인한 사용자
 	 */
 	@Transactional
 	public void deletePost(Long postId, @SessionAttribute("userId") Long userId) {
