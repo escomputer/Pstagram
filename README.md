@@ -7,21 +7,22 @@
 
 ## 🛠 기술 스택
 
-| 구분 | 기술 |
-|------|------|
-| Language | Java 17 |
-| Framework | Spring Boot 3.2 |
-| ORM | Spring Data JPA |
-| DB | MySQL (H2 → 전환) |
-| Build Tool | Gradle |
-| 인증 | Session 기반 (@SessionAttribute) |
-| 테스트 | Postman / IntelliJ HTTP Client |
-| 기타 | JPA Auditing, Soft Delete, 커스텀 예외 처리 등 |
+| 구분       | 기술                             |
+|------------|----------------------------------|
+| Language   | Java 17                          |
+| Framework  | Spring Boot 3.2                  |
+| ORM        | Spring Data JPA                  |
+| DB         | MySQL (H2 → 전환)                |
+| Build Tool | Gradle                           |
+| 인증       | Session 기반 (@SessionAttribute) |
+| 테스트     | Postman / IntelliJ HTTP Client   |
+| 기타       | JPA Auditing, Soft Delete, 커스텀 예외 처리 등 |
 
 ---
 
 ## 📂 프로젝트 구조
 
+```
 com.example.pstagram
 ├── config                  # 설정 (JPA Auditing, PasswordEncoder 등)
 ├── controller              # API 진입 지점 (User, Post, Comment 등)
@@ -40,29 +41,38 @@ com.example.pstagram
 ├── repository              # JPA 인터페이스
 ├── service                 # 비즈니스 로직
 └── common                  # ApiResponse, ResponseCode 등 공통 응답 도구
+```
 
 ---
 
 ## 👥 팀 역할 분담
-이름	담당
-정이슬	: 사용자 인증, 비밀번호 변경, 회원 탈퇴, 게시물 기능
-윤소현	: 프로필 관리, 예외 처리
-이윤혁	: 댓글, 좋아요 기능
-정은세	: 친구 기능, 전체 테스트 작성, 문서화
-한시습	: 팀장, 스프링 
+
+| 이름   | 담당 |
+|--------|------|
+| 정이슬 | 사용자 인증, 비밀번호 변경, 회원 탈퇴, 게시물 기능 |
+| 윤소현 | 프로필 관리, 예외 처리 |
+| 이윤혁 | 댓글, 좋아요 기능 |
+| 정은세 | 친구 기능, 전체 테스트 작성, 문서화 |
+| 한시습 | 팀장, 스프링 구조 설계 및 서포트 |
+
+---
 
 ## ✅ 예외 응답 구조 예시
-'''
+
+```json
 {
   "message": "비밀번호가 일치하지 않습니다.",
   "data": null
 }
-'''
-모든 응답은 ApiResponse<T> 형태로 일관성 있게 제공됩니다.
+```
 
-메시지는 message.properties에서 관리됩니다.
+- 모든 응답은 `ApiResponse<T>` 형태로 일관성 있게 제공됩니다.  
+- 메시지는 `message.properties`에서 관리됩니다.
 
-## 📌 추가 예정
+---
+
+## 📌 추가 예정 기능
+
 - Swagger 연동
 - 이미지 업로드 (S3)
 - 해시태그 기능
