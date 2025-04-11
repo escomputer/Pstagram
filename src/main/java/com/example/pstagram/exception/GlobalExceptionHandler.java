@@ -10,6 +10,8 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import com.example.pstagram.config.MessageUtil;
 import com.example.pstagram.dto.common.ApiResponse;
+import com.example.pstagram.exception.post.PostNotFoundException;
+import com.example.pstagram.exception.post.UnauthorizedPostAccessException;
 import com.example.pstagram.exception.comment.CommentListEmptyException;
 import com.example.pstagram.exception.comment.CommentNotFoundException;
 import com.example.pstagram.exception.comment.EmptyCommentContentException;
@@ -160,6 +162,19 @@ public class GlobalExceptionHandler {
 	@ExceptionHandler(EmptyUpdateContentException.class)
 	public ResponseEntity<String> handleEmptyUpdate(EmptyUpdateContentException ex) {
 		return ResponseEntity.badRequest().body(ex.getMessage());
+	}
+
+
+	@ExceptionHandler(PostNotFoundException.class)
+	public ResponseEntity<ApiResponse<Void>> handlePostNotFound(PostNotFoundException e) {
+		return ResponseEntity.status(HttpStatus.NOT_FOUND)
+			.body(new ApiResponse<>(e.getMessage(), null));
+	}
+
+	@ExceptionHandler(UnauthorizedPostAccessException.class)
+	public ResponseEntity<ApiResponse<Void>> handlePostUnauthorized(UnauthorizedPostAccessException e) {
+		return ResponseEntity.status(HttpStatus.FORBIDDEN)
+			.body(new ApiResponse<>(e.getMessage(), null));
 	}
 
 }
