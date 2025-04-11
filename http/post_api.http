@@ -5,7 +5,7 @@ Content-Type: application/json
 Cookie: JSESSIONID={{JSESSIONID}}
 
 {
-  "content": "뉴스 피드 프로젝트 테스트 api 2324"
+  "content": "뉴스 피드 프로젝트 테스트 api 324"
 }
 
 ###
@@ -60,7 +60,7 @@ Cookie: JSESSIONID={{JSESSIONID}}
 
 ###
 
-### [게시물 수정] 작성자가 아님 ///
+### [게시물 수정] 작성자가 아님
 # @no-cookie-jar
 PUT http://localhost:8080/api/posts/1
 Content-Type: application/json
@@ -80,7 +80,7 @@ Cookie: JSESSIONID={{JSESSIONID}}
 
 ###
 
-### [게시물 삭제] 작성자가 아님 //
+### [게시물 삭제] 작성자가 아님
 # @no-cookie-jar
 DELETE http://localhost:8080/api/posts/1
 Content-Type: application/json

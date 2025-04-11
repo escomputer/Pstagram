@@ -44,6 +44,7 @@ public class FriendService {
 		if (requesterId == null) {
 			throw new UnauthorizedException(ResponseCode.UNAUTHORIZED);
 		}
+
 		Friend friend = Friend.builder().requester(requester).receiver(receiver).build();
 
 		friendRepository.save(friend);
@@ -126,7 +127,7 @@ public class FriendService {
 		}
 
 		Friend friend = friendRepository.findById(friendId)
-			.orElseThrow(() -> new FriendNotFoundException(ResponseCode.FRIEND_NOT_FOUND));
+			.orElseThrow(() -> new FriendNotFoundException(ResponseCode.USER_NOT_FOUND));
 
 		friendRepository.deleteById(friendId); //
 

@@ -31,13 +31,12 @@ public class FriendListResponseDto {
 	public FriendListResponseDto(Friend friend, Long currentUserId) {
 		this.status = friend.getStatus();
 		this.respondedAt = friend.getRespondedAt();
+		this.friendId = friend.getId();
 
 		if (friend.getRequester().getId().equals(currentUserId)) {
-			this.friendId = friend.getReceiver().getId();
 			this.friendName = friend.getReceiver().getNickname();
 
 		} else {
-			this.friendId = friend.getRequester().getId();
 			this.friendName = friend.getRequester().getNickname();
 		}
 	}

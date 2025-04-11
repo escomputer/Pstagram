@@ -78,7 +78,7 @@ public class FriendController {
 	@DeleteMapping("/friend/{friendId}")
 	public ResponseEntity<ApiResponse<Void>> deleteFriend(@SessionAttribute(name = "userId", required = false) Long id,
 		@PathVariable Long friendId) {
-		friendService.deleteFriend(friendId, id);
+		friendService.deleteFriend(id, friendId);
 		String message = messageUtil.getMessage(ResponseCode.FRIEND_DELETE.getMessageKey());
 		return ResponseEntity.ok(new ApiResponse<>(200, message, null));
 	}

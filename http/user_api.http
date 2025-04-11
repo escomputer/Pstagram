@@ -5,7 +5,7 @@ Content-Type: application/json
 
 {
   "email": "test2@example.com",
-  "password": "4!",
+  "password": "Abcd1234!",
   "nickname": "슬몽몽2",
   "bio": "안녕하세요2"
 }
@@ -157,7 +157,7 @@ Content-Type: application/json
 Cookie: JSESSIONID={{JSESSIONID}}
 
 {
-  "email": "test3@example.com",
+  "email": "test1@example.com",
   "currentPassword": "Newpass123!"
 }
 
@@ -170,7 +170,7 @@ Content-Type: application/json
 Cookie: JSESSIONID={{JSESSIONID}}
 
 {
-  "email": "test1@example.com",
+  "email": "test2@example.com",
   "currentPassword": "Newpass123!"
 }
 
