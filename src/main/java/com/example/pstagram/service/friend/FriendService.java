@@ -125,6 +125,9 @@ public class FriendService {
 			throw new UnauthorizedException(ResponseCode.UNAUTHORIZED);
 		}
 
+		Friend friend = friendRepository.findById(friendId)
+			.orElseThrow(() -> new FriendNotFoundException(ResponseCode.FRIEND_NOT_FOUND));
+
 		friendRepository.deleteById(friendId);
 
 	}

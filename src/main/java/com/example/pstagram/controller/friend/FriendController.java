@@ -79,7 +79,7 @@ public class FriendController {
 	public ResponseEntity<ApiResponse<Void>> deleteFriend(@SessionAttribute(name = "userId", required = false) Long id,
 		@PathVariable Long friendId) {
 		friendService.deleteFriend(friendId, id);
-		String message = messageUtil.getMessage(ResponseCode.FRIEND_DELTE.getMessageKey());
+		String message = messageUtil.getMessage(ResponseCode.FRIEND_DELETE.getMessageKey());
 		return ResponseEntity.ok(new ApiResponse<>(200, message, null));
 	}
 

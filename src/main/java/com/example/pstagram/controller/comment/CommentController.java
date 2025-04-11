@@ -14,8 +14,11 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.SessionAttribute;
+import com.example.pstagram.common.ResponseCode;
+import com.example.pstagram.config.MessageUtil;
 import com.example.pstagram.dto.comment.CommentRequestDto;
 import com.example.pstagram.dto.comment.CommentResponseDto;
+import com.example.pstagram.dto.common.ApiResponse;
 import com.example.pstagram.service.comment.CommentService;
 
 @RestController
@@ -24,44 +27,50 @@ import com.example.pstagram.service.comment.CommentService;
 public class CommentController {
 
 	private final CommentService commentService;
+	private final MessageUtil messageUtil;
 
 	@PostMapping("/comments")
-	public ResponseEntity<CommentResponseDto> save(
+	public ResponseEntity<ApiResponse<CommentResponseDto>> save(
 		@PathVariable Long postId,
-		@SessionAttribute(name = "userId") Long userId,
+		@SessionAttribute(name = "userId", required = false) Long userId,
 		@RequestBody CommentRequestDto commentRequestDto) {
 
-		// CommentResponseDto commentResponseDto = commentService.save(userId, postId, commentRequestDto);
-		// return new ResponseEntity<>(commentResponseDto, HttpStatus.CREATED);
+		CommentResponseDto comment = commentService.save(userId, postId, commentRequestDto);
+		String message = messageUtil.getMessage(ResponseCode.COMMENT_CREATE_SUCCESS.getMessageKey()); // 예시 메시지
 
-		return ResponseEntity.ok(commentService.save(userId, postId, commentRequestDto));
+		return ResponseEntity.ok(new ApiResponse<>(200, message, comment));
 	}
 
 	@GetMapping("/comments")
-	public ResponseEntity<List<CommentResponseDto>> findByPost(@PathVariable Long postId) {
-		// List<CommentResponseDto> commentResponseDtoList = commentService.getCommentsByPost(postId);
-		// return new ResponseEntity<>(commentResponseDtoList, HttpStatus.OK); // 팀원들과 형태 맞추기!!
+	public ResponseEntity<ApiResponse<List<CommentResponseDto>>> findByPost(@PathVariable Long postId) {
+		List<CommentResponseDto> comments = commentService.getCommentsByPost(postId);
 
-		return ResponseEntity.ok(commentService.getCommentsByPost(postId));
+		return ResponseEntity.ok(new ApiResponse<>(200, null, comments));
 	}
 
 	@PutMapping("/comments/{commentId}")
-	public ResponseEntity<CommentResponseDto> updateComment(
+	public ResponseEntity<ApiResponse<CommentResponseDto>> updateComment(
 		@PathVariable Long commentId,
-		@SessionAttribute(name = "userId") Long userId,
 		@PathVariable Long postId,
+		@SessionAttribute(name = "userId", required = false) Long userId,
 		@RequestBody CommentRequestDto commentRequestDto) {
 
-		return ResponseEntity.ok(commentService.updateComment(commentId, userId, commentRequestDto));
+		CommentResponseDto updated = commentService.updateComment(commentId, userId, commentRequestDto);
+		String message = messageUtil.getMessage(ResponseCode.COMMENT_UPDATE_SUCCESS.getMessageKey()); // 예시 메시지
+
+		return ResponseEntity.ok(new ApiResponse<>(200, message, updated));
 	}
 
 	@DeleteMapping("/comments/{commentId}")
-	public ResponseEntity<Void> deleteComment(
+	public ResponseEntity<ApiResponse<Void>> deleteComment(
 		@PathVariable Long commentId,
 		@PathVariable Long postId,
-		@SessionAttribute(name = "userId") Long userId) {
+		@SessionAttribute(name = "userId", required = false) Long userId) {
 
 		commentService.deleteComment(userId, commentId);
-		return ResponseEntity.noContent().build();
+		String message = messageUtil.getMessage(
+			ResponseCode.COMMENT_DELETE_SUCCESS.getMessageKey()); // 또는 삭제 성공 메시지 하나 추가해도 됨
+
+		return ResponseEntity.ok(new ApiResponse<>(200, message, null));
 	}
 }

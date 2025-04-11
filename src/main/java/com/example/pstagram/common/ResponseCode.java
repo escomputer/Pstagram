@@ -5,7 +5,7 @@ public enum ResponseCode {
 	REQUEST_CANCEL("friend.request.cancel"),
 	REQUEST_ACCEPT("friend.request.accept"),
 	REQUEST_REJECT("friend.request.reject"),
-	FRIEND_DELTE("friend.list.delete"),
+	FRIEND_DELETE("friend.list.delete"),
 	FRIEND_NOT_FOUND("friend.notfound"),
 	FRIEND_ALREADY_REQUEST("friend.already.requested"),
 	SELF_REQUEST("friend.self.request"),
@@ -31,6 +31,12 @@ public enum ResponseCode {
 	COMMENT_NOT_FOUND("comment.not-found"),
 	COMMENT_UNAUTHORIZED("comment.unauthorized"),
 	COMMENT_EMPTY_LIST("comment.empty-list"),
+	COMMENT_CREATE_SUCCESS("comment.create.success"),
+	COMMENT_UPDATE_SUCCESS("comment.update.success"),
+	COMMENT_DELETE_SUCCESS("comment.delete.success"),
+
+	//profile
+	PROFILE_UPDATE_SUCCESS("profile.update.success"),
 
 	//post
 	POST_SUCCESS("post.create.success"),

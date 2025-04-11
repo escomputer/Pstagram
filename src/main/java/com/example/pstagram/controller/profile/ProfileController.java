@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.SessionAttribute;
+import com.example.pstagram.common.ResponseCode;
 import com.example.pstagram.config.MessageUtil;
 import com.example.pstagram.dto.common.ApiResponse;
 import com.example.pstagram.dto.profile.UpdateProfileRequestDto;
@@ -63,7 +64,7 @@ public class ProfileController {
 	) {
 		profileService.update(id, requestDto);
 
-		String message = messageUtil.getMessage("profile.update.success");
+		String message = messageUtil.getMessage(ResponseCode.PROFILE_UPDATE_SUCCESS);
 		return ResponseEntity.ok(new ApiResponse<>(200, message, null));
 	}
 
