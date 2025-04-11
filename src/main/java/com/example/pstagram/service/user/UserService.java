@@ -52,12 +52,12 @@ public class UserService {
 			.email(requestDto.getEmail())
 			.password(encodedPassword)
 			.nickname(requestDto.getNickname())
-			.bio(null)
+			.bio(requestDto.getBio())
 			.build();
 
 		userRepository.save(user);
 
-		return new UserResponseDto(user.getId(), user.getEmail(), user.getNickname());
+		return new UserResponseDto(user.getId(), user.getEmail(), user.getNickname(), user.getBio());
 	}
 
 	/**
@@ -75,7 +75,7 @@ public class UserService {
 			throw new InvalidPasswordException(ResponseCode.PASSWORD_INVALID);
 		}
 
-		return new UserResponseDto(user.getId(), user.getEmail(), user.getNickname());
+		return new UserResponseDto(user.getId(), user.getEmail(), user.getNickname(), user.getBio());
 	}
 
 	/**

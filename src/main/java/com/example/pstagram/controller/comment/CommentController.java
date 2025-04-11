@@ -4,7 +4,6 @@ import java.util.List;
 
 import lombok.RequiredArgsConstructor;
 
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -13,7 +12,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.SessionAttribute;
 import com.example.pstagram.dto.comment.CommentRequestDto;
@@ -30,13 +28,13 @@ public class CommentController {
 	@PostMapping("/comments")
 	public ResponseEntity<CommentResponseDto> save(
 		@PathVariable Long postId,
-		@SessionAttribute(name="userId") Long userId,
-		@RequestBody CommentRequestDto commentRequestDto){
+		@SessionAttribute(name = "userId") Long userId,
+		@RequestBody CommentRequestDto commentRequestDto) {
 
 		// CommentResponseDto commentResponseDto = commentService.save(userId, postId, commentRequestDto);
 		// return new ResponseEntity<>(commentResponseDto, HttpStatus.CREATED);
 
-		return ResponseEntity.ok(commentService.save(userId,postId,commentRequestDto));
+		return ResponseEntity.ok(commentService.save(userId, postId, commentRequestDto));
 	}
 
 	@GetMapping("/comments")
@@ -50,23 +48,19 @@ public class CommentController {
 	@PutMapping("/comments/{commentId}")
 	public ResponseEntity<CommentResponseDto> updateComment(
 		@PathVariable Long commentId,
-		@SessionAttribute(name="userId") Long userId,
+		@SessionAttribute(name = "userId") Long userId,
 		@PathVariable Long postId,
 		@RequestBody CommentRequestDto commentRequestDto) {
 
-		// CommentResponseDto updateComment = commentService.updateComment(commentId, commentRequestDto);
-		// return new ResponseEntity<>(updateComment, HttpStatus.OK);
-
-		return ResponseEntity.ok(commentService.updateComment(commentId,userId,commentRequestDto));
+		return ResponseEntity.ok(commentService.updateComment(commentId, userId, commentRequestDto));
 	}
 
 	@DeleteMapping("/comments/{commentId}")
 	public ResponseEntity<Void> deleteComment(
 		@PathVariable Long commentId,
 		@PathVariable Long postId,
-		@SessionAttribute(name="userId") Long userId) {
-		// commentService.deleteComment(commentId);
-		// return new ResponseEntity<>(HttpStatus.OK);
+		@SessionAttribute(name = "userId") Long userId) {
+
 		commentService.deleteComment(userId, commentId);
 		return ResponseEntity.noContent().build();
 	}

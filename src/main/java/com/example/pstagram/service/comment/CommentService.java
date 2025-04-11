@@ -94,7 +94,7 @@ public class CommentService {
 		}
 
 		Comment comment = commentRepository.findById(commentId)
-			.orElseThrow(() -> new CommentNotFoundException(ResponseCode.POST_NOT_FOUND));
+			.orElseThrow(() -> new CommentNotFoundException(ResponseCode.COMMENT_NOT_FOUND));
 
 		if (!comment.getUser().getId().equals(userId)) {
 			throw new UnauthorizedCommentAccessException(ResponseCode.COMMENT_UNAUTHORIZED);
@@ -113,7 +113,7 @@ public class CommentService {
 		);
 	}
 
-	public void deleteComment(Long commentId, Long userId) {
+	public void deleteComment(Long userId, Long commentId) {
 
 		Comment comment = commentRepository.findById(commentId)
 			.orElseThrow(() -> new CommentNotFoundException(ResponseCode.COMMENT_NOT_FOUND));
