@@ -43,7 +43,7 @@ public class PostController {
 	@PostMapping
 	public ApiResponse<PostResponseDto> createPost(
 		@Valid @RequestBody PostRequestDto requestDto,
-		@SessionAttribute("userId") Long userId
+		@SessionAttribute(value = "userId", required = false) Long userId
 	) {
 		PostResponseDto response = postService.createPost(requestDto, userId);
 		String message = messageUtil.getMessage(ResponseCode.POST_SUCCESS);

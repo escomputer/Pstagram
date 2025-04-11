@@ -128,7 +128,7 @@ public class FriendService {
 		Friend friend = friendRepository.findById(friendId)
 			.orElseThrow(() -> new FriendNotFoundException(ResponseCode.FRIEND_NOT_FOUND));
 
-		friendRepository.deleteById(friendId);
+		friendRepository.deleteById(friendId); //
 
 	}
 }

@@ -5,7 +5,7 @@ Content-Type: application/json
 Cookie: JSESSIONID={{JSESSIONID}}
 
 {
-  "content": "댓글 달기223344 !!"
+  "content": "댓글 달기22322223ㄷㄷ44 !!"
 }
 
 ###
@@ -19,7 +19,7 @@ Content-Type: application/json
 
 ### 댓글 수정
 # @no-cookie-jar
-PUT http://localhost:8080/api/posts/2/comments/1
+PUT http://localhost:8080/api/posts/1/comments/1
 Content-Type: application/json
 Cookie: JSESSIONID={{JSESSIONID}}
 
@@ -31,7 +31,7 @@ Cookie: JSESSIONID={{JSESSIONID}}
 
 ### 댓글 삭제
 # @no-cookie-jar
-DELETE http://localhost:8080/api/posts/1/comments/1
+DELETE http://localhost:8080/api/posts/1/comments/
 Content-Type: application/json
 Cookie: JSESSIONID={{JSESSIONID}}
 
@@ -39,7 +39,7 @@ Cookie: JSESSIONID={{JSESSIONID}}
 
 ### 댓글 내용 없음 (EmptyCommentContentException)
 # @no-cookie-jar
-POST http://localhost:8080/api/posts/3/comments
+POST http://localhost:8080/api/posts/1/comments
 Content-Type: application/json
 Cookie: JSESSIONID={{JSESSIONID}}
 
@@ -69,7 +69,7 @@ Cookie: JSESSIONID={{JSESSIONID}}
 
 ###
 
-### 작성자 불일치 (UnauthorizedCommentAccessException)
+### 작성자 불일치 (UnauthorizedCommentAccessException) /////
 # @no-cookie-jar
 PUT http://localhost:8080/api/posts/1/comments/1
 Content-Type: application/json
@@ -81,7 +81,7 @@ Cookie: JSESSIONID={{JSESSIONID}} # 로그인 다른 사람으로 해서 !
 
 ###
 
-### 댓글 없음 (CommentListEmptyException)
+### 댓글 없음 (CommentListEmptyException) // 아무것도 반환안됨
 # @no-cookie-jar
-GET http://localhost:8080/api/posts/999/comments
+GET http://localhost:8080/api/posts/1/comments
 Content-Type: application/json

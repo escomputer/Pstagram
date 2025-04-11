@@ -50,4 +50,6 @@ public interface UserRepository extends JpaRepository<User, Long> {
 			.orElseThrow(() -> new EmailNotFoundException(ResponseCode.EMAIL_NOT_FOUND));
 	}
 
+	Optional<User> findByEmailAndDeletedAtIsNull(String email);
+
 }

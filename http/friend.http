@@ -1,6 +1,6 @@
 ### 친구 요청 보내기
 # @no-cookie-jar
-POST http://localhost:8080/api/friends/request/2
+POST http://localhost:8080/api/friends/request/1
 Content-Type: application/json
 Cookie: JSESSIONID={{JSESSIONID}}
 
@@ -8,7 +8,7 @@ Cookie: JSESSIONID={{JSESSIONID}}
 
 ### 친구 요청 취소
 # @no-cookie-jar
-DELETE http://localhost:8080/api/friends/request/2
+DELETE http://localhost:8080/api/friends/request/4
 Content-Type: application/json
 Cookie: JSESSIONID={{JSESSIONID}}
 
@@ -24,7 +24,7 @@ Cookie: JSESSIONID={{JSESSIONID}}
 
 ### 친구 요청 거절
 # @no-cookie-jar
-POST http://localhost:8080/api/friends/status/2/reject
+POST http://localhost:8080/api/friends/status/4/reject
 Content-Type: application/json
 Cookie: JSESSIONID={{JSESSIONID}}
 
@@ -55,7 +55,7 @@ Cookie: JSESSIONID={{JSESSIONID}}
 ###
 
 ### 자기 자신에게 친구 요청 (SelfRequestException)
-POST http://localhost:8080/api/friends/request/1
+POST http://localhost:8080/api/friends/request/2
 Content-Type: application/json
 Cookie: JSESSIONID={{JSESSIONID}}
 

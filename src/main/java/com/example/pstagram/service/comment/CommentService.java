@@ -59,8 +59,7 @@ public class CommentService {
 			user.getNickname(),
 			savedComment.getContent(),
 			savedComment.getCreatedAt(),
-			savedComment.getUpdatedAt(),
-			savedComment.getDeletedAt()
+			savedComment.getUpdatedAt()
 		);
 	}
 
@@ -80,8 +79,7 @@ public class CommentService {
 				comment.getUser().getNickname(),
 				comment.getContent(),
 				comment.getCreatedAt(),
-				comment.getUpdatedAt(),
-				comment.getDeletedAt()
+				comment.getUpdatedAt()
 			))
 			.toList();
 
@@ -108,8 +106,7 @@ public class CommentService {
 			comment.getUser().getNickname(),
 			comment.getContent(),
 			comment.getCreatedAt(),
-			comment.getUpdatedAt(),
-			comment.getDeletedAt()
+			comment.getUpdatedAt()
 		);
 	}
 

@@ -68,7 +68,7 @@ public class UserService {
 	 */
 	@Transactional(readOnly = true)
 	public UserResponseDto login(LoginRequestDto requestDto) {
-		User user = userRepository.findByEmail(requestDto.getEmail())
+		User user = userRepository.findByEmailAndDeletedAtIsNull(requestDto.getEmail())
 			.orElseThrow(() -> new EmailNotFoundException(ResponseCode.EMAIL_NOT_FOUND));
 
 		if (!passwordEncoder.matches(requestDto.getPassword(), user.getPassword())) {

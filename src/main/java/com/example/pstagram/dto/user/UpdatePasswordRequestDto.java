@@ -2,6 +2,7 @@ package com.example.pstagram.dto.user;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
+
 import lombok.Getter;
 
 /**
@@ -16,17 +17,17 @@ public class UpdatePasswordRequestDto {
 	/**
 	 * 현재 비밀번호 (필수)
 	 */
-	@NotBlank(message = "{user.password.required}")
+	@NotBlank(message = "user.password.required")
 	private final String currentPassword;
 
 	/**
 	 * 새 비밀번호
 	 * - 8자 이상, 영문/숫자/특수문자 포함
 	 */
-	@NotBlank(message = "{user.password.required}")
+	@NotBlank(message = "user.password.required")
 	@Pattern(
 		regexp = "^(?=.*[A-Za-z])(?=.*\\d)(?=.*[!@#$%^&*])[A-Za-z\\d!@#$%^&*]{8,}$",
-		message = "{user.password.invalid-format}"
+		message = "user.password.invalid-format"
 	)
 	private final String newPassword;
 

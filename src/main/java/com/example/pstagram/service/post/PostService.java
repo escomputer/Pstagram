@@ -74,7 +74,8 @@ public class PostService {
 	 * @return 저장된 게시물 응답 DTO
 	 */
 	@Transactional
-	public PostResponseDto createPost(PostRequestDto requestDto, @SessionAttribute("userId") Long userId) {
+	public PostResponseDto createPost(PostRequestDto requestDto,
+		@SessionAttribute(value = "userId", required = false) Long userId) {
 		if (userId == null) {
 			throw new UnauthorizedException(ResponseCode.UNAUTHORIZED);
 		}

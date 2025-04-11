@@ -34,7 +34,7 @@ public class SignUpRequestDto {
 	@NotBlank(message = "{user.password.required}")
 	@Pattern(
 		regexp = "^(?=.*[A-Za-z])(?=.*\\d)(?=.*[!@#$%^&*])[A-Za-z\\d!@#$%^&*]{8,}$",
-		message = "{user.password.invalid-format}"
+		message = "user.password.invalid-format"
 	)
 	private final String password;
 

@@ -5,9 +5,9 @@ Content-Type: application/json
 
 {
   "email": "test2@example.com",
-  "password": "Abcd1234!",
-  "nickname": "슬몽몽",
-  "bio": "안녕ㅇ핫요"
+  "password": "4!",
+  "nickname": "슬몽몽2",
+  "bio": "안녕하세요2"
 }
 
 ###
@@ -55,7 +55,7 @@ Content-Type: application/json
 Cookie: JSESSIONID={{JSESSIONID}}
 
 {
-  "email": "test@example.com",
+  "email": "test1@example.com",
   "currentPassword": "Newpass123!"
 }
 
@@ -67,7 +67,7 @@ POST http://localhost:8080/api/users/signup
 Content-Type: application/json
 
 {
-  "email": "test@example.com",
+  "email": "test1@example.com",
   "password": "Abcd1234!",
   "nickname": "슬몽몽"
 }
@@ -92,7 +92,7 @@ POST http://localhost:8080/api/users/login
 Content-Type: application/json
 
 {
-  "email": "test@example.com",
+  "email": "test1@example.com",
   "password": "WrongPassword!"
 }
 
@@ -131,7 +131,7 @@ Content-Type: application/json
 Cookie: JSESSIONID={{JSESSIONID}}
 
 {
-  "currentPassword": "Abcd1234!",
+  "currentPassword": "Newpass123!",
   "newPassword": "1234"
 }
 
@@ -144,7 +144,7 @@ Content-Type: application/json
 Cookie: JSESSIONID={{JSESSIONID}}
 
 {
-  "currentPassword": "Abcd1234!",
+  "currentPassword": "Newpass123!",
   "newPassword": "Password123"
 }
 
@@ -157,8 +157,8 @@ Content-Type: application/json
 Cookie: JSESSIONID={{JSESSIONID}}
 
 {
-  "email": "test@example.com",
-  "currentPassword": "WrongPassword123!"
+  "email": "test3@example.com",
+  "currentPassword": "Newpass123!"
 }
 
 ###
@@ -170,7 +170,7 @@ Content-Type: application/json
 Cookie: JSESSIONID={{JSESSIONID}}
 
 {
-  "email": "test@example.com",
+  "email": "test1@example.com",
   "currentPassword": "Newpass123!"
 }
 

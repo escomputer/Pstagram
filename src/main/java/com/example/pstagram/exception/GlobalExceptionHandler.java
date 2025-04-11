@@ -1,9 +1,13 @@
 package com.example.pstagram.exception;
 
+import java.util.List;
+
 import lombok.RequiredArgsConstructor;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.FieldError;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -25,6 +29,7 @@ import com.example.pstagram.exception.user.AlreadyDeletedUserException;
 import com.example.pstagram.exception.user.EmailAlreadyExistsException;
 import com.example.pstagram.exception.user.EmailNotFoundException;
 import com.example.pstagram.exception.user.InvalidPasswordException;
+import com.example.pstagram.exception.user.SamePasswordException;
 import com.example.pstagram.exception.user.UnauthorizedException;
 import com.example.pstagram.exception.user.UserNotFoundException;
 
@@ -43,7 +48,7 @@ public class GlobalExceptionHandler {
 	 */
 	@ExceptionHandler(EmailAlreadyExistsException.class)
 	public ResponseEntity<ApiResponse<Void>> handleEmailExists(EmailAlreadyExistsException ex) {
-		String message = messageUtil.getMessage("user.email.exists");
+		String message = messageUtil.getMessage(ResponseCode.EMAIL_EXISTS);
 		return ResponseEntity.status(HttpStatus.CONFLICT).body(new ApiResponse<>(409, message, null));
 	}
 
@@ -52,20 +57,27 @@ public class GlobalExceptionHandler {
 	 */
 	@ExceptionHandler(EmailNotFoundException.class)
 	public ResponseEntity<ApiResponse<Void>> handleEmailNotFound(EmailNotFoundException ex) {
-		String message = messageUtil.getMessage("user.email.not-found");
+		String message = messageUtil.getMessage(ResponseCode.EMAIL_NOT_FOUND);
 		return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ApiResponse<>(404, message, null));
 	}
 
 	@ExceptionHandler(EmptyCommentContentException.class)
-	public ResponseEntity<String> handleEmptyCommentContent(EmptyCommentContentException ex) {
-		return ResponseEntity.badRequest().body(ex.getMessage());
+	public ResponseEntity<ApiResponse<Void>> handleEmptyCommentContent(EmptyCommentContentException ex) {
+		return ResponseEntity.badRequest()
+			.body(new ApiResponse<>(400, messageUtil.getMessage(ex.getCode().getMessageKey()), null));
 	}
 
 	@ExceptionHandler(UserNotFoundException.class)
 	public ResponseEntity<ApiResponse<Void>> handleUserNotFound(UserNotFoundException ex) {
 		return ResponseEntity.status(HttpStatus.NOT_FOUND)
-			.body(new ApiResponse<>(HttpStatus.NOT_FOUND.value(), messageUtil.getMessage(ex.getCode().getMessageKey()),
+			.body(new ApiResponse<>(404, messageUtil.getMessage(ex.getCode().getMessageKey()),
 				null));
+	}
+
+	@ExceptionHandler(SamePasswordException.class)
+	public ResponseEntity<ApiResponse<Void>> handleSamePasswordException(SamePasswordException ex) {
+		String message = messageUtil.getMessage(ex.getCode().getMessageKey());
+		return ResponseEntity.badRequest().body(new ApiResponse<>(400, message, null));
 	}
 
 	/**
@@ -74,7 +86,8 @@ public class GlobalExceptionHandler {
 	@ExceptionHandler(InvalidPasswordException.class)
 	public ResponseEntity<ApiResponse<Void>> handleInvalidPassword(InvalidPasswordException ex) {
 		String message = messageUtil.getMessage(ResponseCode.PASSWORD_INVALID);
-		return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new ApiResponse<>(400, message, null));
+		return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+			.body(new ApiResponse<>(400, message, null));
 
 	}
 
@@ -126,42 +139,64 @@ public class GlobalExceptionHandler {
 	}
 
 	@ExceptionHandler(UnauthorizedCommentAccessException.class)
-	public ResponseEntity<String> handleUnauthorizedComment(UnauthorizedCommentAccessException ex) {
-		return ResponseEntity.status(HttpStatus.FORBIDDEN).body(ex.getMessage());
+	public ResponseEntity<ApiResponse<Void>> handleUnauthorizedComment(UnauthorizedCommentAccessException ex) {
+		return ResponseEntity.status(HttpStatus.FORBIDDEN)
+			.body(new ApiResponse<>(403, messageUtil.getMessage(ex.getCode().getMessageKey()), null));
 	}
 
 	@ExceptionHandler(UnauthorizedException.class)
 	public ResponseEntity<ApiResponse<Void>> handleUnauthorized(UnauthorizedException ex) {
 		return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
 			.body(
-				new ApiResponse<>(HttpStatus.UNAUTHORIZED.value(),
+				new ApiResponse<>(400,
 					messageUtil.getMessage(ex.getCode().getMessageKey()),
 					null));
 	}
 
 	@ExceptionHandler(CommentListEmptyException.class)
-	public ResponseEntity<String> handleEmptyCommentList(CommentListEmptyException ex) {
-		return ResponseEntity.status(HttpStatus.NO_CONTENT).body(ex.getMessage());
+	public ResponseEntity<ApiResponse<Void>> handleEmptyCommentList(CommentListEmptyException ex) {
+		return ResponseEntity.badRequest()
+			.body(new ApiResponse<>(400, messageUtil.getMessage(ex.getCode().getMessageKey()), null));
 	}
 
 	@ExceptionHandler(SelfRequestException.class)
 	public ResponseEntity<ApiResponse<Void>> handleSelfRequest(SelfRequestException ex) {
 		return ResponseEntity.status(HttpStatus.BAD_REQUEST)
 			.body(
-				new ApiResponse<>(HttpStatus.BAD_REQUEST.value(),
+				new ApiResponse<>(400,
 					messageUtil.getMessage(ex.getCode().getMessageKey()),
 					null));
 	}
 
 	@ExceptionHandler(EmptyUpdateContentException.class)
-	public ResponseEntity<String> handleEmptyUpdate(EmptyUpdateContentException ex) {
-		return ResponseEntity.badRequest().body(ex.getMessage());
+	public ResponseEntity<ApiResponse<Void>> handleEmptyUpdate(EmptyUpdateContentException ex) {
+		return ResponseEntity.badRequest()
+			.body(new ApiResponse<>(400, messageUtil.getMessage(ex.getCode().getMessageKey()), null));
 	}
 
 	@ExceptionHandler(UnauthorizedPostAccessException.class)
-	public ResponseEntity<ApiResponse<Void>> handlePostUnauthorized(UnauthorizedPostAccessException e) {
+	public ResponseEntity<ApiResponse<Void>> handlePostUnauthorized(UnauthorizedPostAccessException ex) {
 		return ResponseEntity.status(HttpStatus.FORBIDDEN)
-			.body(new ApiResponse<>(403, e.getMessage(), null));
+			.body(new ApiResponse<>(403, messageUtil.getMessage(ex.getCode().getMessageKey()), null));
 	}
 
+	/**
+	 *
+	 * @param ex
+	 * String errorMessage 는 혹시 fieldErrors가 비어있을때를 방지하기 위하여
+	 * @return
+	 */
+	@ExceptionHandler(MethodArgumentNotValidException.class)
+	public ResponseEntity<ApiResponse<Void>> handleValidationException(MethodArgumentNotValidException ex) {
+		List<FieldError> fieldErrors = ex.getBindingResult().getFieldErrors();
+		String errorMessage = "알 수 없는 오류가 발생했습니다.";
+
+		if (!fieldErrors.isEmpty()) {
+			String defaultMessage = fieldErrors.get(0).getDefaultMessage();
+			errorMessage = messageUtil.getMessage(defaultMessage);
+		}
+
+		ApiResponse<Void> response = new ApiResponse<>(403, errorMessage, null);
+		return ResponseEntity.badRequest().body(response);
+	}
 }

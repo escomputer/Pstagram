@@ -1,13 +1,13 @@
 ### 프로필 조회 (사용자 ID로 조회)
 # @no-cookie-jar
-GET http://localhost:8080/api/users/1
+GET http://localhost:8080/api/users/2
 Content-Type: application/json
 
 ###
 
 ### 프로필 수정 (닉네임 / 소개글 수정)
 # @no-cookie-jar
-PATCH http://localhost:8080/api/users/1
+PATCH http://localhost:8080/api/users/2
 Content-Type: application/json
 Cookie: JSESSIONID={{JSESSIONID}}
 
