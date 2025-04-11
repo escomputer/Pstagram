@@ -38,14 +38,11 @@ public class CommentService {
 			throw new EmptyCommentContentException(ResponseCode.COMMENT_EMPTY);
 		}
 
-		// User user = userRepository.findById(userId).get(); // 값 비워두면 빈값이 나와서 오류날 수 있음. orElseThrow(); 사용하기
-		// User user = userRepository.findById(userId)
-		// 	.orElseThrow(() -> new IllegalArgumentException("해당 유저가 존재하지 않습니다."));
+
 		User user = userRepository.findById(userId)
+
 			.orElseThrow(() -> new UserNotFoundException(ResponseCode.USER_NOT_FOUND));
-		// Post post = postRepository.findById(postId).get(); // 값 비워두면 빈값이 나와서 오류날 수 있음. orElseThrow(); 사용하기
-		// Post post = postRepository.findById(postId)
-		// 	.orElseThrow(()-> new IllegalArgumentException("해당 일정이 존재하지 않습니다."));
+
 		Post post = postRepository.findById(postId)
 			.orElseThrow(() -> new PostNotFoundException(ResponseCode.POST_NOT_FOUND));
 
@@ -97,9 +94,7 @@ public class CommentService {
 			throw new EmptyUpdateContentException(ResponseCode.COMMENT_EMPTY_UPDATE);
 		}
 
-		// Comment comment = commentRepository.findById(commentId).get();
-		// Comment comment = commentRepository.findById(commentId)
-		// 		.orElseThrow(()-> new IllegalArgumentException("해당 댓글이 존재하지 않습니다."));
+
 		Comment comment = commentRepository.findById(commentId)
 			.orElseThrow(() -> new CommentNotFoundException(ResponseCode.POST_NOT_FOUND));
 
@@ -121,9 +116,7 @@ public class CommentService {
 	}
 
 	public void deleteComment(Long commentId, Long userId) {
-		//	Comment comment = commentRepository.findById(commentId).get();
-		// 	Comment comment = commentRepository.findById(commentId)
-		// 			.orElseThrow(()-> new IllegalArgumentException("해당 댓글이 존재하지 않습니다."));
+
 
 		Comment comment = commentRepository.findById(commentId)
 			.orElseThrow(() -> new CommentNotFoundException(ResponseCode.COMMENT_NOT_FOUND));
@@ -131,8 +124,7 @@ public class CommentService {
 		if (!comment.getUser().getId().equals(userId)) {
 			throw new UnauthorizedCommentAccessException(ResponseCode.COMMENT_UNAUTHORIZED);
 		}
-		commentRepository.delete(comment);
+		commentRepository.deleteById(commentId);
 
-		// 삭제는 소프트 delete 해야함. 찾아보고 해보기!!   >>@SQLDelete
 	}
 }
