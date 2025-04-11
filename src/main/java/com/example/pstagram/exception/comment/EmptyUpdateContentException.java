@@ -1,8 +1,16 @@
 package com.example.pstagram.exception.comment;
 
+import com.example.pstagram.common.ResponseCode;
 
-public class EmptyUpdateContentException extends RuntimeException{
-	public EmptyUpdateContentException() {
-		super("수정할 댓글 내용이 없습니다.");
+public class EmptyUpdateContentException extends RuntimeException {
+	private final ResponseCode code;
+
+	public EmptyUpdateContentException(ResponseCode code) {
+		super(code.getMessageKey());
+		this.code = code;
+	}
+
+	public ResponseCode getCode() {
+		return code;
 	}
 }

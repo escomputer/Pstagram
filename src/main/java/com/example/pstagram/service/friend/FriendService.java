@@ -18,7 +18,7 @@ import com.example.pstagram.exception.friend.DuplicateFriendRequestException;
 import com.example.pstagram.exception.friend.FriendNotFoundException;
 import com.example.pstagram.exception.friend.FriendRequestNotFoundException;
 import com.example.pstagram.exception.friend.SelfRequestException;
-import com.example.pstagram.exception.friend.UnauthorizedException;
+import com.example.pstagram.exception.user.UnauthorizedException;
 import com.example.pstagram.repository.friend.FriendRepository;
 import com.example.pstagram.service.user.UserService;
 

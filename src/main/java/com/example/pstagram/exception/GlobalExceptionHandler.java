@@ -4,14 +4,12 @@ import lombok.RequiredArgsConstructor;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import com.example.pstagram.common.ResponseCode;
 import com.example.pstagram.config.MessageUtil;
 import com.example.pstagram.dto.common.ApiResponse;
-import com.example.pstagram.exception.post.PostNotFoundException;
-import com.example.pstagram.exception.post.UnauthorizedPostAccessException;
 import com.example.pstagram.exception.comment.CommentListEmptyException;
 import com.example.pstagram.exception.comment.CommentNotFoundException;
 import com.example.pstagram.exception.comment.EmptyCommentContentException;
@@ -21,13 +19,14 @@ import com.example.pstagram.exception.friend.DuplicateFriendRequestException;
 import com.example.pstagram.exception.friend.FriendNotFoundException;
 import com.example.pstagram.exception.friend.FriendRequestNotFoundException;
 import com.example.pstagram.exception.friend.SelfRequestException;
-import com.example.pstagram.exception.friend.UnauthorizedException;
-import com.example.pstagram.exception.friend.UserNotFoundException;
 import com.example.pstagram.exception.post.PostNotFoundException;
+import com.example.pstagram.exception.post.UnauthorizedPostAccessException;
 import com.example.pstagram.exception.user.AlreadyDeletedUserException;
 import com.example.pstagram.exception.user.EmailAlreadyExistsException;
 import com.example.pstagram.exception.user.EmailNotFoundException;
 import com.example.pstagram.exception.user.InvalidPasswordException;
+import com.example.pstagram.exception.user.UnauthorizedException;
+import com.example.pstagram.exception.user.UserNotFoundException;
 
 @ControllerAdvice
 /**
@@ -74,7 +73,7 @@ public class GlobalExceptionHandler {
 	 */
 	@ExceptionHandler(InvalidPasswordException.class)
 	public ResponseEntity<ApiResponse<Void>> handleInvalidPassword(InvalidPasswordException ex) {
-		String message = messageUtil.getMessage("user.password.invalid");
+		String message = messageUtil.getMessage(ResponseCode.PASSWORD_INVALID);
 		return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new ApiResponse<>(400, message, null));
 
 	}
@@ -92,47 +91,42 @@ public class GlobalExceptionHandler {
 	public ResponseEntity<ApiResponse<Void>> handleAlreadyDeletedUserException(AlreadyDeletedUserException ex) {
 		return ResponseEntity.status(HttpStatus.CONFLICT)
 			.body(
-				new ApiResponse<>(HttpStatus.CONFLICT.value(),
+				new ApiResponse<>(409,
 					messageUtil.getMessage(ex.getCode().getMessageKey()),
 					null));
 	}
 
 	@ExceptionHandler(PostNotFoundException.class)
-	public ResponseEntity<String> handlePostNotFound(PostNotFoundException ex) {
-		return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
-	}
-
-	@ExceptionHandler(MethodArgumentNotValidException.class)
-	public ResponseEntity<String> handleValidationException(MethodArgumentNotValidException ex) {
-		return new ResponseEntity<>(
-			"@Valid failed: " + ex.getBindingResult().getFieldError().getDefaultMessage(),
-			HttpStatus.BAD_REQUEST);
+	public ResponseEntity<ApiResponse<Void>> handlePostNotFound(PostNotFoundException ex) {
+		return ResponseEntity.status(HttpStatus.NOT_FOUND)
+			.body(new ApiResponse<>(404, messageUtil.getMessage(ex.getCode().getMessageKey()), null));
 	}
 
 	@ExceptionHandler(FriendRequestNotFoundException.class)
 	public ResponseEntity<ApiResponse<Void>> handleFriendRequestNotFound(FriendRequestNotFoundException
 		ex) {
 		return ResponseEntity.status(HttpStatus.NOT_FOUND)
-			.body(new ApiResponse<>(HttpStatus.NOT_FOUND.value(),
+			.body(new ApiResponse<>(404,
 				messageUtil.getMessage(ex.getCode().getMessageKey()),
 				null));
 	}
 
 	@ExceptionHandler(CommentNotFoundException.class)
-	public ResponseEntity<String> handleCommentNotFound(CommentNotFoundException ex) {
-		return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
+	public ResponseEntity<ApiResponse<Void>> handleCommentNotFound(CommentNotFoundException ex) {
+		return ResponseEntity.status(HttpStatus.NOT_FOUND)
+			.body(new ApiResponse<>(404, messageUtil.getMessage(ex.getCode().getMessageKey()), null));
 	}
 
 	@ExceptionHandler(FriendNotFoundException.class)
 	public ResponseEntity<ApiResponse<Void>> handleFriendNotFound(FriendNotFoundException ex) {
 		return ResponseEntity.status(HttpStatus.NOT_FOUND)
-			.body(new ApiResponse<>(HttpStatus.NOT_FOUND.value(),
+			.body(new ApiResponse<>(404,
 				messageUtil.getMessage(ex.getCode().getMessageKey()),
 				null));
 	}
 
 	@ExceptionHandler(UnauthorizedCommentAccessException.class)
-	public ResponseEntity<String> handleUnauthorized(UnauthorizedCommentAccessException ex) {
+	public ResponseEntity<String> handleUnauthorizedComment(UnauthorizedCommentAccessException ex) {
 		return ResponseEntity.status(HttpStatus.FORBIDDEN).body(ex.getMessage());
 	}
 
@@ -164,17 +158,10 @@ public class GlobalExceptionHandler {
 		return ResponseEntity.badRequest().body(ex.getMessage());
 	}
 
-
-	@ExceptionHandler(PostNotFoundException.class)
-	public ResponseEntity<ApiResponse<Void>> handlePostNotFound(PostNotFoundException e) {
-		return ResponseEntity.status(HttpStatus.NOT_FOUND)
-			.body(new ApiResponse<>(e.getMessage(), null));
-	}
-
 	@ExceptionHandler(UnauthorizedPostAccessException.class)
 	public ResponseEntity<ApiResponse<Void>> handlePostUnauthorized(UnauthorizedPostAccessException e) {
 		return ResponseEntity.status(HttpStatus.FORBIDDEN)
-			.body(new ApiResponse<>(e.getMessage(), null));
+			.body(new ApiResponse<>(403, e.getMessage(), null));
 	}
 
 }

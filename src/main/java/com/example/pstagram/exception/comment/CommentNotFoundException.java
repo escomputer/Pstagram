@@ -1,7 +1,16 @@
 package com.example.pstagram.exception.comment;
 
-public class CommentNotFoundException extends RuntimeException{
-	public CommentNotFoundException() {
-		super("해당 댓글을 찾을 수 없습니다.");
+import com.example.pstagram.common.ResponseCode;
+
+public class CommentNotFoundException extends RuntimeException {
+	private final ResponseCode code;
+
+	public CommentNotFoundException(ResponseCode code) {
+		super(code.getMessageKey());
+		this.code = code;
+	}
+
+	public ResponseCode getCode() {
+		return code;
 	}
 }

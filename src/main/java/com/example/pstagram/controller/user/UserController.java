@@ -9,9 +9,12 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.SessionAttribute;
+import com.example.pstagram.common.ResponseCode;
 import com.example.pstagram.config.MessageUtil;
 import com.example.pstagram.dto.common.ApiResponse;
 import com.example.pstagram.dto.user.DeleteUserRequestDto;
@@ -43,7 +46,7 @@ public class UserController {
 	@PostMapping("/signup")
 	public ResponseEntity<ApiResponse<UserResponseDto>> signup(@Valid @RequestBody SignUpRequestDto requestDto) {
 		UserResponseDto responseDto = userService.signup(requestDto);
-		String message = messageUtil.getMessage("user.signup.success");
+		String message = messageUtil.getMessage(ResponseCode.SIGNUP_SUCCESS);
 		return ResponseEntity.status(HttpStatus.CREATED).body(new ApiResponse<>(200, message, responseDto));
 	}
 
@@ -62,7 +65,7 @@ public class UserController {
 		// 세션에 사용자 ID 저장
 		session.setAttribute("userId", user.getId());
 
-		String message = messageUtil.getMessage("user.login.success");
+		String message = messageUtil.getMessage(ResponseCode.LOGIN_SUCCESS);
 		return ResponseEntity.ok(new ApiResponse<>(200, message, user));
 	}
 
@@ -75,7 +78,7 @@ public class UserController {
 	@PostMapping("/logout")
 	public ResponseEntity<ApiResponse<Void>> logout(HttpSession session) {
 		session.invalidate(); // 세션 무효화
-		String message = messageUtil.getMessage("user.logout.success");
+		String message = messageUtil.getMessage(ResponseCode.LOGOUT_SUCCESS);
 		return ResponseEntity.ok(new ApiResponse<>(200, message, null));
 	}
 
@@ -83,22 +86,22 @@ public class UserController {
 	 * 회원 탈퇴 API (세션 인증 확인 포함)
 	 *
 	 * @param requestDto 이메일 + 현재 비밀번호
-	 * @param session    로그인 사용자 세션
+	 * @userId 로그인 사용자 세션
 	 * @return 탈퇴 성공 메시지
 	 */
+
 	@DeleteMapping("/delete")
 	public ResponseEntity<ApiResponse<Void>> deleteUser(@Valid @RequestBody DeleteUserRequestDto requestDto,
-		HttpSession session) {
+		@SessionAttribute(value = "userId", required = false) Long userId) {
 
-		Long userId = (Long)session.getAttribute("userId"); // session attri.
 		if (userId == null) {
-			throw new UnauthorizedException(messageUtil.getMessage("user.unauthorized"));
+			throw new UnauthorizedException(ResponseCode.UNAUTHORIZED);
 		}
 
 		userService.deleteUser(requestDto);
 
 		// 탈퇴 완료 메시지 반환
-		String message = messageUtil.getMessage("user.delete.success");
+		String message = messageUtil.getMessage(ResponseCode.DELETE_SUCCESS);
 		return ResponseEntity.ok(new ApiResponse<>(200, message, null));
 	}
 
@@ -108,10 +111,10 @@ public class UserController {
 	@PutMapping("/password")
 	public ResponseEntity<ApiResponse<Void>> updatePassword(
 		@Valid @RequestBody UpdatePasswordRequestDto requestDto,
-		HttpSession session) {
-		userService.updatePassword(requestDto, session);
-		String message = messageUtil.getMessage("user.password.updated"); //
-		return ResponseEntity.ok(new ApiResponse<>(message, null));
+		@SessionAttribute(value = "userId", required = false) Long userId) {
+		userService.updatePassword(requestDto, userId);
+		String message = messageUtil.getMessage(ResponseCode.PASSWORD_UPDATED); //
+		return ResponseEntity.ok(new ApiResponse<>(200, message, null));
 	}
 
 }
