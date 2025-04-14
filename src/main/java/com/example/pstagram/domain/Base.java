@@ -1,13 +1,16 @@
 package com.example.pstagram.domain;
 
-import jakarta.persistence.*;
+import java.time.LocalDateTime;
+
+import jakarta.persistence.Column;
+import jakarta.persistence.EntityListeners;
+import jakarta.persistence.MappedSuperclass;
+
 import lombok.Getter;
 
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
-
-import java.time.LocalDateTime;
 
 @Getter
 @MappedSuperclass
@@ -21,7 +24,8 @@ public abstract class Base {
 	@LastModifiedDate
 	private LocalDateTime updatedAt = LocalDateTime.now();
 
-	private LocalDateTime deletedAt = LocalDateTime.now();
+	//timeWhenDeleted() 메서드에서만 deletedAt = LocalDateTime.now() 실행되도록 해야함
+	private LocalDateTime deletedAt; // 기본값 없이 null 상태 유지!
 
 	public void timeWhenDeleted() {
 		this.deletedAt = LocalDateTime.now();
