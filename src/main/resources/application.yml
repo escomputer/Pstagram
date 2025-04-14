@@ -1,4 +1,8 @@
-spring:
+spring :
+  datasource :
+    url : jdbc:mysql://localhost:3306/pschema
+    username : ${DB_USER}
+    password : ${DB_PASSWORD}
   jpa:
     hibernate:
       ddl-auto: create
